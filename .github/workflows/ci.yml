@@ -1,0 +1,36 @@
+# cmux-moshi CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-14]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy,rustfmt
+      - name: Run Rust verification suite
+        run: ./scripts/test.sh
+      - name: Guard against committed dumps and obvious secrets
+        if: runner.os == 'Linux'
+        run: |
+          set -euo pipefail
+          if git grep -I -nE 'ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|-----BEGIN (RSA |OPENSSH |EC )?PRIVATE KEY-----' -- . \
+            ':!.github/workflows/ci.yml'; then
+            echo "Possible secret material in the tree"
+            exit 1
+          fi
