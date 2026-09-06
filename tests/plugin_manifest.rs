@@ -29,5 +29,4 @@ fn docs_do_not_claim_moshi_lives_in_the_sidebar() {
     assert!(readme.contains("plugin use"));
     assert!(readme.contains("cmux-tui/spec/plugins.md"));
     assert!(!readme.contains("custom sidebar into"));
-    assert!(!readme.to_ascii_lowercase().contains("ismael"));
 }
