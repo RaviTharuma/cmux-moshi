@@ -67,8 +67,8 @@ fn score_positions(positions: &[usize]) -> i64 {
 }
 
 /// Filters rows by title, preserving original indices for activation.
-pub fn filter_titles<'a, T>(
-    rows: &'a [T],
+pub fn filter_titles<T>(
+    rows: &[T],
     query: &str,
     title: impl Fn(&T) -> &str,
 ) -> Vec<(usize, MatchResult)> {
@@ -112,7 +112,7 @@ mod tests {
     #[test]
     fn subsequence_is_case_insensitive() {
         let result = fuzzy_match("Accounting", "act").unwrap();
-        assert_eq!(result.positions, vec![0, 1, 2]);
+        assert_eq!(result.positions, vec![0, 1, 6]);
     }
 
     #[test]
