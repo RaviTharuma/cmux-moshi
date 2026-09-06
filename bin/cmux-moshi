@@ -1,0 +1,24 @@
+#!/bin/sh
+# Resolve and execute the checksum-verified cmux-moshi Rust binary.
+set -eu
+
+SCRIPT=$0
+while [ -L "$SCRIPT" ]; do
+  SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$SCRIPT")" && pwd)
+  LINK=$(readlink "$SCRIPT") || exit 1
+  case "$LINK" in
+    /*) SCRIPT=$LINK ;;
+    *) SCRIPT=$SCRIPT_DIR/$LINK ;;
+  esac
+done
+ROOT=$(CDPATH= cd -- "$(dirname -- "$SCRIPT")/.." && pwd)
+BINARY="$ROOT/.cmux-moshi/bin/cmux-moshi"
+
+if [ ! -x "$BINARY" ]; then
+  "$ROOT/bin/cmux-moshi-fetch"
+fi
+[ -x "$BINARY" ] || {
+  printf 'cmux-moshi: runtime binary is missing after bootstrap: %s\n' "$BINARY" >&2
+  exit 1
+}
+exec "$BINARY" "$@"

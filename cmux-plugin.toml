@@ -1,0 +1,11 @@
+[plugin]
+name = "cmux-moshi"
+kind = "sidebar"
+version = "0.1.0"
+description = "Official cmux plugin for Moshi: friendly workspace titles on tmux sessions"
+
+[run]
+command = ["bin/cmux-moshi", "doctor"]
+
+[build]
+command = ["bin/cmux-moshi-fetch"]
