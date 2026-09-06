@@ -1,11 +1,11 @@
 [plugin]
-name = "cmux-moshi"
+name = "moshi"
 kind = "sidebar"
-version = "0.1.0"
-description = "Official cmux plugin for Moshi: friendly workspace titles on tmux sessions"
+version = "0.2.0"
+description = "Moshi host CLI plus an optional workspace picker"
 
 [run]
-command = ["bin/cmux-moshi", "doctor"]
+command = ["target/release/cmux-moshi-sidebar"]
 
 [build]
-command = ["bin/cmux-moshi-fetch"]
+command = ["cargo", "build", "--release"]

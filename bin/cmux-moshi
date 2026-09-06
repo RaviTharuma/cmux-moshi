@@ -1,5 +1,7 @@
 #!/bin/sh
-# Resolve and execute the checksum-verified cmux-moshi Rust binary.
+# Resolve and execute the cmux-moshi host CLI.
+# Official plugin install runs `cargo build --release`, so prefer that binary.
+# `bin/cmux-moshi-fetch` is a contributor helper only (not [build]).
 set -eu
 
 SCRIPT=$0
@@ -12,13 +14,17 @@ while [ -L "$SCRIPT" ]; do
   esac
 done
 ROOT=$(CDPATH= cd -- "$(dirname -- "$SCRIPT")/.." && pwd)
-BINARY="$ROOT/.cmux-moshi/bin/cmux-moshi"
+RELEASE="$ROOT/target/release/cmux-moshi"
+FETCHED="$ROOT/.cmux-moshi/bin/cmux-moshi"
 
-if [ ! -x "$BINARY" ]; then
+if [ -x "$RELEASE" ]; then
+  exec "$RELEASE" "$@"
+fi
+if [ ! -x "$FETCHED" ]; then
   "$ROOT/bin/cmux-moshi-fetch"
 fi
-[ -x "$BINARY" ] || {
-  printf 'cmux-moshi: runtime binary is missing after bootstrap: %s\n' "$BINARY" >&2
+[ -x "$FETCHED" ] || {
+  printf 'cmux-moshi: runtime binary is missing after bootstrap: %s\n' "$FETCHED" >&2
   exit 1
 }
-exec "$BINARY" "$@"
+exec "$FETCHED" "$@"

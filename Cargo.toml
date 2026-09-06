@@ -1,9 +1,9 @@
 [package]
 name = "cmux-moshi"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
-rust-version = "1.85"
-description = "Official cmux plugin for Moshi: friendly workspace titles on tmux sessions"
+rust-version = "1.88"
+description = "Moshi host integration for cmux: friendly workspace titles on tmux sessions"
 license = "MIT"
 repository = "https://github.com/RaviTharuma/cmux-moshi"
 default-run = "cmux-moshi"
@@ -12,8 +12,16 @@ default-run = "cmux-moshi"
 name = "cmux-moshi"
 path = "src/main.rs"
 
+[[bin]]
+name = "cmux-moshi-sidebar"
+path = "src/sidebar_main.rs"
+
 [dependencies]
-clap = { version = "4", features = ["derive"] }
+anyhow = "1.0.104"
+clap = { version = "4.6.6", features = ["derive"] }
+cmux-client = "0.1.2"
+crossterm = "0.29.0"
+ratatui = "0.30.2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 

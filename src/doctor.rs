@@ -79,8 +79,12 @@ pub fn format_report(checks: &[Check]) -> (String, i32) {
         let _ = writeln!(out, "  [{mark}] {:<22} {}", check.name, check.detail);
     }
     out.push_str("\nTips\n");
+    out.push_str("  • Host CLI (the product): cmux-moshi doctor|list|sync|dashboard|cleanup\n");
     out.push_str(
-        "  • Install: cmux sidebar plugin install https://github.com/RaviTharuma/cmux-moshi.git\n",
+        "  • Install packaging: cmux sidebar plugin install https://github.com/RaviTharuma/cmux-moshi.git\n",
+    );
+    out.push_str(
+        "  • Optional picker: cmux sidebar plugin use moshi && cmux server reload-config\n",
     );
     out.push_str("  • Moshi: Settings → Integrations → Export ENV (sets MOSHI_CLIENT=1)\n");
     out.push_str("  • Then run: cmux-moshi dashboard   or   cmux-moshi install-shell\n");
