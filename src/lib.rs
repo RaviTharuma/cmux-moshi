@@ -1,8 +1,10 @@
-//! Official cmux plugin for Moshi clients.
+//! Moshi host integration for cmux.
 //!
-//! Reconstructs the live mapping from tmux session names to cmux workspace ids
-//! and friendly titles, then optionally renames default `ttys*` sessions and
-//! offers a login-shell dashboard for Moshi.
+//! The product is the `cmux-moshi` CLI: map friendly cmux workspace titles
+//! onto tmux session names, plus a login-shell dashboard when
+//! `MOSHI_CLIENT=1`. The optional `cmux-moshi-sidebar` binary exists so the
+//! official mux sidebar plugin packaging channel has a real `[run]`
+//! executable. Moshi phones never see that PTY.
 
 pub mod cleanup;
 pub mod cli;
@@ -14,6 +16,7 @@ pub mod host;
 pub mod mapping;
 pub mod procenv;
 pub mod shell;
+pub mod sidebar;
 pub mod sync;
 pub mod titles;
 pub mod tmux;

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.0 — 2026-09-06
+
+Moshi host integration aligned with the official mux sidebar plugin
+contract.
+
+- Primary product remains the `cmux-moshi` CLI: doctor, list, sync/rename,
+  dashboard, cleanup, install-shell
+- `cmux-plugin.toml` matches the official shape: name `moshi`,
+  `[run] = target/release/cmux-moshi-sidebar`,
+  `[build] = cargo build --release`
+- New optional `cmux-moshi-sidebar` workspace picker (cmux-client;
+  Esc clears query; Ctrl-C exits; reconnect UI if the socket is missing)
+- Docs lead with the host CLI / phone path; `plugin use` is optional
+  packaging, not a Moshi sidebar
+- `bin/cmux-moshi-fetch` is a contributor helper only
+
 ## 0.1.0 — 2026-09-06
 
 First public release of **cmux-moshi**, the official cmux plugin for Moshi

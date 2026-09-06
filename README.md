@@ -1,58 +1,64 @@
 <h1 align="center">cmux-moshi</h1>
-<p align="center"><strong>Official cmux plugin for Moshi</strong></p>
+<p align="center"><strong>Moshi host integration for cmux</strong></p>
 <p align="center">
-  Friendly cmux workspace titles on tmux sessions over Mosh/SSH.
-  CLI + optional login-shell dashboard. No custom sidebar.
+  Map friendly cmux workspace titles onto tmux session names.
+  Login-shell dashboard when <code>MOSHI_CLIENT=1</code>.
+  Official mux sidebar plugin packaging; optional workspace picker.
 </p>
 
 <p align="center">
   <a href="https://github.com/RaviTharuma/cmux-moshi/actions/workflows/ci.yml"><img src="https://github.com/RaviTharuma/cmux-moshi/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
   <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/runtime-Rust-brown.svg" alt="Rust binary" /></a>
-  <a href="https://github.com/topics/plugin"><img src="https://img.shields.io/badge/kind-cmux%20plugin-4c71f2.svg" alt="cmux plugin" /></a>
 </p>
 
 <p align="center">
   English ·
   Kurz auf Deutsch unten ·
-  <a href="CHANGELOG.md">changelog</a>
+  <a href="CHANGELOG.md">changelog</a> ·
+  <a href="docs/PLUGIN.md">plugin contract</a>
 </p>
 
-**cmux-moshi** is the official [cmux](https://github.com/manaflow-ai/cmux) plugin
-for [Moshi](https://getmoshi.app) clients. Moshi connects over Mosh or SSH.
-cmux keeps friendly workspace titles in its own UI and does not copy those
-titles onto tmux session names, so remote clients only see `ttys001`,
-`ttys002`, … This plugin reconstructs the live mapping and optionally renames
-those default sessions.
+**cmux-moshi** is the Moshi **host integration** for
+[cmux](https://github.com/manaflow-ai/cmux). Moshi is a phone client that
+connects over Mosh or SSH. It never sees the cmux left sidebar. What the phone
+needs on the Mac is:
 
-The product is the `cmux-moshi` CLI and an optional login-shell dashboard.
-It does **not** install a custom sidebar into `~/.config/cmux/sidebars/`, add
-extra Bonsplit panes, or replace `cmux sidebar select` / `cmux sidebar open`.
-`kind = "sidebar"` in `cmux-plugin.toml` is plugin-manager packaging only.
+1. Friendly cmux workspace titles copied onto tmux session names (`ttys*` → title)
+2. A login-shell dashboard when Moshi exports `MOSHI_CLIENT=1`
+3. `doctor`, `cleanup`, and optional `install-shell`
 
-Current source version: **v0.1.0**.
+The product is the **`cmux-moshi` CLI** (and an optional LaunchAgent that runs
+`sync`). Official cmux only ships git plugins through the
+[mux sidebar plugin](https://github.com/manaflow-ai/cmux/blob/main/cmux-tui/spec/plugins.md)
+channel, so this repo also carries a valid `cmux-plugin.toml`. That packaging
+can install the repo; `plugin use` is optional and hosts a small generic
+workspace picker. It is not a Moshi panel.
 
-> **Deutsch (kurz):** Offizielles cmux-Plugin für Moshi. Installation über den
-> cmux Plugin-Manager. Produkt ist die CLI plus optionales Login-Dashboard —
-> keine eigene Sidebar.
+Current source version: **v0.2.0**.
 
-## Install
+> **Deutsch (kurz):** Moshi-Host-Integration, keine Sidebar-App. Die Phone-App
+> sieht die cmux-Linke-Sidebar nie. Produkt ist die CLI (`sync`, Dashboard,
+> doctor). `cmux sidebar plugin install` ist nur der offizielle
+> Verteilkanal; `plugin use` ist optional (Workspace-Picker in cmux).
+
+## Install (host CLI)
+
+cmux clones this repo, runs `cargo build --release`, and verifies the
+sidebar `[run]` binary. After that, the host CLI is at
+`target/release/cmux-moshi` inside the plugin directory (or on PATH if you
+copy it).
 
 ```bash
 cmux sidebar plugin install https://github.com/RaviTharuma/cmux-moshi.git
-cmux sidebar plugin use cmux-moshi
-cmux sidebar plugin update cmux-moshi
-cmux sidebar plugin remove cmux-moshi
+# Some cmux builds also accept the older alias:
+#   cmux-tui plugin install https://github.com/RaviTharuma/cmux-moshi.git
 ```
 
-That clones into `$XDG_DATA_HOME/cmux/mux-plugins/cmux-moshi` (or
-`~/.local/share/cmux/mux-plugins/cmux-moshi`). The plugin-manager build step
-runs `bin/cmux-moshi-fetch`. For v0.1.0, release binaries may not exist yet;
-the fetch script then builds with `cargo build --release --locked` when Cargo
-is available. `bin/cmux-moshi` is a thin POSIX-sh launcher for the installed
-binary.
+That clones into `$XDG_DATA_HOME/cmux/mux-plugins/moshi` (or
+`~/.local/share/cmux/mux-plugins/moshi`). Plugin name is `moshi`.
 
-### After install
+Then use the CLI:
 
 ```bash
 cmux-moshi doctor
@@ -77,6 +83,49 @@ Periodic rename without a login snippet: copy
 `~/Library/LaunchAgents/` and `launchctl load` it (macOS). It runs
 `cmux-moshi sync` every five minutes.
 
+Contributors can also build locally:
+
+```bash
+cargo build --release
+./target/release/cmux-moshi doctor
+```
+
+`bin/cmux-moshi-fetch` is a contributor helper (release asset or source
+build). It is **not** the official `[build]` command.
+
+## Optional: in-cmux workspace picker
+
+`plugin use` is **optional**. It does not put Moshi in the sidebar. It hosts
+a small generic picker that lists workspaces by friendly title and selects
+one through `cmux-client`.
+
+```bash
+cmux sidebar plugin use moshi
+cmux server reload-config
+```
+
+(`cmux-tui plugin use moshi` if your build still uses that alias.)
+
+Return to the built-in sidebar with `cmux sidebar plugin use --builtin`.
+
+Standalone development (reconnect UI if the socket is missing; never panics):
+
+```bash
+CMUX_TUI_SOCKET=/path/to/cmux-tui.sock cargo run --bin cmux-moshi-sidebar
+# or
+CMUX_TUI_SOCKET=/path/to/cmux-tui.sock cargo run --bin cmux-moshi-sidebar -- --probe
+```
+
+Keys: type to filter, Enter selects the workspace, Esc clears the query
+(does **not** exit — cmux owns prefix-escape), Ctrl-C exits.
+
+Contract details: [docs/PLUGIN.md](docs/PLUGIN.md) and
+[cmux-tui/spec/plugins.md](https://github.com/manaflow-ai/cmux/blob/main/cmux-tui/spec/plugins.md).
+
+This repo does **not** install interpreted sidebars under
+`~/.config/cmux/sidebars/`, HTML/WebView chrome, or a
+`cmux sidebar select` / `cmux sidebar open` product path.
+
 ## Commands
 
 | Command | What it does |
@@ -100,7 +149,7 @@ cmux-moshi dashboard --force
 
 ## How it works
 
-Every command rebuilds the map live. No cache.
+Every CLI command rebuilds the map live. No cache.
 
 1. `tmux list-sessions` and `tmux list-panes` for names, attach state, pane pid, and pane command
 2. Process environment of the pane (and parents) for `CMUX_WORKSPACE_ID`
@@ -109,25 +158,31 @@ Every command rebuilds the map live. No cache.
 `sync` only touches default `ttys*` names unless you pass `--force`.
 `cleanup` only kills `ttys*` sessions whose pane and children are idle shells.
 
+The optional picker talks to the mux control socket (`CMUX_TUI_SOCKET`,
+legacy `CMUX_MUX_SOCKET`) through the `cmux-client` crate: `identify`,
+`list_workspaces`, `select_workspace`.
+
 ## Requirements
 
-- [cmux](https://cmux.com) with `cmux sidebar plugin` on PATH
+- [cmux](https://cmux.com) with `cmux sidebar plugin` on PATH (or the
+  `cmux-tui plugin` alias on older builds)
 - `tmux`
 - `mosh` / `mosh-server` optional (Moshi can use SSH)
 - [Moshi](https://getmoshi.app) with Export ENV enabled for the dashboard
-- Contributors building from source: Rust 1.85+ / Cargo
-
-v0.1.0 documents `cargo build --release` as the fetch fallback until GitHub
-Release assets (`cmux-moshi-<version>-<target>` + `SHA256SUMS`) are published.
+- Contributors building from source: Rust 1.88+ / Cargo
 
 ## Development
 
 ```bash
 ./scripts/test.sh          # cargo fmt --check, clippy -D warnings, cargo test --locked
-./bin/cmux-moshi --version # after fetch/build
+cargo build --release
+./target/release/cmux-moshi --version
+./target/release/cmux-moshi-sidebar --probe
 ```
 
-Layout: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Agent notes: [AGENTS.md](AGENTS.md).
+Layout: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Plugin contract: [docs/PLUGIN.md](docs/PLUGIN.md).
+Agent notes: [AGENTS.md](AGENTS.md).
 
 ## License
 

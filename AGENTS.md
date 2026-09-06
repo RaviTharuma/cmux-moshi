@@ -1,13 +1,23 @@
 # AGENTS.md
 
-`cmux-moshi` is an official **cmux plugin for Moshi** implemented in Rust.
-The product is the `cmux-moshi` CLI plus an optional login-shell dashboard.
-Do not add a custom sidebar under `~/.config/cmux/sidebars/`, extra Bonsplit
-panes, HTML/WebView chrome, or `cmux sidebar select` / `cmux sidebar open` as
-the user-facing product.
+`cmux-moshi` is a **Moshi host integration** implemented in Rust. The
+product is the `cmux-moshi` CLI (`doctor`, `list`, `sync`, `dashboard`,
+`cleanup`, `install-shell`). Moshi phones connect over Mosh/SSH and never
+see the cmux left sidebar.
 
-Runtime source lives under `src/*.rs`. Integration tests live under `tests/*.rs`.
-End users install via the cmux plugin manager; contributors need Rust/Cargo.
+Official cmux only distributes git plugins via the mux sidebar plugin
+channel. Keep a valid `cmux-plugin.toml` (`kind = "sidebar"`, short name
+`moshi`, `[run] = target/release/cmux-moshi-sidebar`,
+`[build] = cargo build --release`). `plugin use` is optional packaging;
+do not treat the picker as a Moshi panel.
+
+Do not add interpreted sidebars under `~/.config/cmux/sidebars/`, extra
+Bonsplit panes, HTML/WebView chrome, or `cmux sidebar select` /
+`cmux sidebar open` as the user-facing product.
+
+Runtime source lives under `src/*.rs`. Integration tests live under
+`tests/*.rs`. End users install via the cmux plugin manager; contributors
+need Rust/Cargo.
 
 ### Lint / test / build / run
 
@@ -18,10 +28,11 @@ End users install via the cmux plugin manager; contributors need Rust/Cargo.
 - Keep runtime changes in `src/*.rs` and coverage in `src/*` unit tests plus
   `tests/*.rs`. Tests must use temporary directories — never hardcoded home
   paths.
-- Talk to cmux only through the public `cmux` CLI (`cmux rpc …`, `cmux --help`).
-  Do not link private frameworks.
-- `kind = "sidebar"` in `cmux-plugin.toml` is plugin-manager packaging only.
-  `[run]` launches `bin/cmux-moshi doctor`.
+- Talk to cmux only through the public `cmux` CLI (`cmux rpc …`, `cmux --help`)
+  or the public `cmux-client` crate on the sidebar socket. Do not link
+  private frameworks.
+- Sidebar code must not panic when `CMUX_TUI_SOCKET` is unset. Esc clears
+  the query and must not exit.
 
 ### Host tools on CI / cloud VMs
 

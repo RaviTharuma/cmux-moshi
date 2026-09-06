@@ -1,4 +1,7 @@
-//! Binary entry for `cmux-moshi`.
+//! Binary entry for the Moshi host CLI (`cmux-moshi`).
+//!
+//! Phone clients never receive a mux sidebar PTY. This binary is the
+//! integration: doctor, list, sync, dashboard, cleanup, install-shell.
 
 fn main() {
     match cmux_moshi::cli::run(std::env::args_os()) {

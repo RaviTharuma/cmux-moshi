@@ -14,12 +14,12 @@ use std::io::{self, Write};
 use std::path::PathBuf;
 use std::time::SystemTime;
 
-/// Official cmux plugin for Moshi: friendly workspace titles on tmux sessions.
+/// Moshi host integration: friendly workspace titles on tmux sessions.
 #[derive(Debug, Parser)]
 #[command(
     name = "cmux-moshi",
     version,
-    about = "Official cmux plugin for Moshi: friendly workspace titles on tmux sessions",
+    about = "Moshi host integration: friendly workspace titles on tmux sessions",
     long_about = None
 )]
 pub struct Cli {
