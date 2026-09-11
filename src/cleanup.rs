@@ -90,6 +90,13 @@ fn classify(row: &SessionRow, host: &dyn Host) -> CleanupPlan {
             reason: "named session".into(),
         };
     }
+    if row.attached {
+        return CleanupPlan {
+            session: row.session.clone(),
+            kill: false,
+            reason: "attached session".into(),
+        };
+    }
     if let Some(cmd) = &row.pane_command {
         if !is_idle_shell(cmd) {
             return CleanupPlan {
@@ -181,6 +188,17 @@ mod tests {
         assert!(!plans[1].kill);
         assert!(!plans[2].kill);
         assert!(!plans[3].kill);
+    }
+
+    #[test]
+    fn keeps_attached_idle_ttys_sessions() {
+        let mut host = FakeHost::default();
+        host.comms.insert(9, "zsh".into());
+        let mut attached = row("ttys009", "zsh", 9);
+        attached.attached = true;
+        let plans = plan(&snap(vec![attached]), &host);
+        assert!(!plans[0].kill);
+        assert!(plans[0].reason.contains("attached"));
     }
 
     #[test]

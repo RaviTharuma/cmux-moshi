@@ -71,15 +71,9 @@ pub fn join_rows(
     sessions
         .iter()
         .map(|session| {
-            let session_panes: Vec<&TmuxPane> = panes
-                .iter()
-                .filter(|pane| pane.session == session.name)
-                .collect();
-            let pane_pid = session_panes.first().map(|p| p.pid);
-            let pane_command = session_panes
-                .first()
-                .map(|p| p.command.clone())
-                .filter(|s| !s.is_empty());
+            let pane = tmux::primary_pane(panes, &session.name);
+            let pane_pid = pane.map(|p| p.pid);
+            let pane_command = pane.map(|p| p.command.clone()).filter(|s| !s.is_empty());
             let mut workspace_id = pane_pid.and_then(|pid| walk_workspace_id(host, pid));
             if workspace_id.is_none() {
                 workspace_id = index.tty_to_id.get(&normalize_tty(&session.name)).cloned();
@@ -177,11 +171,55 @@ mod tests {
                 session: "ttys001".into(),
                 pid: 20,
                 command: "zsh".into(),
+                active: true,
             }],
             &index,
             &host,
         );
         assert_eq!(rows[0].workspace_id.as_deref(), Some("AAA-BBB"));
         assert_eq!(rows[0].title.as_deref(), Some("accounting"));
+    }
+
+    #[test]
+    fn prefers_active_pane_for_workspace_env() {
+        let mut host = FakeHost::default();
+        host.environs.insert(
+            20,
+            HashMap::from([("CMUX_WORKSPACE_ID".into(), "idle-ws".into())]),
+        );
+        host.environs.insert(
+            21,
+            HashMap::from([("CMUX_WORKSPACE_ID".into(), "active-ws".into())]),
+        );
+        let mut index = HashMapIndex::default();
+        index
+            .by_id
+            .insert("active-ws".into(), "active-title".into());
+        index.by_id.insert("idle-ws".into(), "idle-title".into());
+        let rows = join_rows(
+            &[TmuxSession {
+                name: "ttys001".into(),
+                attached: false,
+            }],
+            &[
+                TmuxPane {
+                    session: "ttys001".into(),
+                    pid: 20,
+                    command: "zsh".into(),
+                    active: false,
+                },
+                TmuxPane {
+                    session: "ttys001".into(),
+                    pid: 21,
+                    command: "claude".into(),
+                    active: true,
+                },
+            ],
+            &index,
+            &host,
+        );
+        assert_eq!(rows[0].workspace_id.as_deref(), Some("active-ws"));
+        assert_eq!(rows[0].title.as_deref(), Some("active-title"));
+        assert_eq!(rows[0].pane_command.as_deref(), Some("claude"));
     }
 }

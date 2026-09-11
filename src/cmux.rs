@@ -224,9 +224,20 @@ fn workspace_from_value(value: &Value) -> Option<WorkspaceTitle> {
 
 fn terminal_from_value(value: &Value) -> Option<DebugTerminal> {
     let obj = value.as_object()?;
+    // Upstream `debug.terminals` rows use workspace_id / surface_id / tty /
+    // workspace_title / last_known_workspace_id. Never treat bare `id` as a
+    // workspace id — that field (when present) is typically a surface id.
     Some(DebugTerminal {
         tty: string_field(obj, &["tty", "tty_name", "name"]),
-        workspace_id: string_field(obj, &["workspace_id", "workspaceId", "id"]),
+        workspace_id: string_field(
+            obj,
+            &[
+                "workspace_id",
+                "workspaceId",
+                "last_known_workspace_id",
+                "lastKnownWorkspaceId",
+            ],
+        ),
         title: string_field(
             obj,
             &[
@@ -295,9 +306,32 @@ mod tests {
             "terminals": [{
                 "tty": "/dev/ttys001",
                 "workspace_id": "AAA",
-                "title": "accounting"
+                "workspace_title": "accounting",
+                "surface_id": "surf-1"
             }]
         }));
         assert_eq!(terminals[0].tty.as_deref(), Some("/dev/ttys001"));
+        assert_eq!(terminals[0].workspace_id.as_deref(), Some("AAA"));
+        assert_eq!(terminals[0].title.as_deref(), Some("accounting"));
+        assert_eq!(terminals[0].surface_id.as_deref(), Some("surf-1"));
+    }
+
+    #[test]
+    fn terminal_parser_ignores_bare_id_and_uses_last_known_workspace() {
+        let terminals = parse_debug_terminals(&serde_json::json!({
+            "terminals": [{
+                "id": "should-not-be-workspace",
+                "surface_id": "surf-9",
+                "tty": "ttys009",
+                "last_known_workspace_id": "WS-LAST",
+                "workspace_title": "inbox"
+            }]
+        }));
+        assert_eq!(terminals[0].workspace_id.as_deref(), Some("WS-LAST"));
+        assert_eq!(terminals[0].title.as_deref(), Some("inbox"));
+        assert_ne!(
+            terminals[0].workspace_id.as_deref(),
+            Some("should-not-be-workspace")
+        );
     }
 }

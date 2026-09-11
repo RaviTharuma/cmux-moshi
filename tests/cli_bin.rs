@@ -12,7 +12,7 @@ fn version_and_help_list_product_commands() {
     assert!(version.status.success());
     let stdout = String::from_utf8_lossy(&version.stdout);
     assert!(stdout.contains("cmux-moshi"));
-    assert!(stdout.contains("0.2.0"));
+    assert!(stdout.contains("0.2.1"));
 
     let help = bin().arg("--help").output().expect("help");
     assert!(help.status.success());
@@ -83,7 +83,7 @@ fn doctor_runs_without_host_tools() {
         .expect("doctor");
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert!(stdout.contains("cmux-moshi doctor"));
-    assert!(stdout.contains("Export ENV"));
+    assert!(stdout.contains("MOSHI_CLIENT env toggle"));
     assert!(stdout.contains("cmux sidebar plugin install"));
 }
 

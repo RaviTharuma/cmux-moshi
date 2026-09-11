@@ -86,8 +86,11 @@ pub fn format_report(checks: &[Check]) -> (String, i32) {
     out.push_str(
         "  • Optional picker: cmux sidebar plugin use moshi && cmux server reload-config\n",
     );
-    out.push_str("  • Moshi: Settings → Integrations → Export ENV (sets MOSHI_CLIENT=1)\n");
+    out.push_str(
+        "  • Moshi: Settings → enable MOSHI_CLIENT env toggle (exports MOSHI_CLIENT=1), then reconnect\n",
+    );
     out.push_str("  • Then run: cmux-moshi dashboard   or   cmux-moshi install-shell\n");
+    out.push_str("  • Dashboard: y syncs ttys* titles; c cleans idle orphans\n");
     (out, if failed { 1 } else { 0 })
 }
 
@@ -162,7 +165,7 @@ fn moshi_client_check(host: &dyn Host) -> Check {
         None => Check {
             name: "MOSHI_CLIENT".into(),
             status: Status::Warn,
-            detail: "unset. In Moshi enable Settings → Integrations → Export ENV, then reconnect"
+            detail: "unset. In Moshi enable Settings → MOSHI_CLIENT env toggle, then reconnect"
                 .into(),
         },
     }
@@ -196,7 +199,7 @@ mod tests {
             .any(|c| c.name == "MOSHI_CLIENT" && c.status == Status::Warn));
         let (report, code) = format_report(&checks);
         assert_eq!(code, 1);
-        assert!(report.contains("Export ENV"));
+        assert!(report.contains("MOSHI_CLIENT env toggle"));
     }
 
     #[test]

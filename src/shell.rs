@@ -10,16 +10,19 @@ pub const BEGIN_MARKER: &str = "# >>> cmux-moshi begin";
 /// Marker end written to the rc file.
 pub const END_MARKER: &str = "# <<< cmux-moshi end";
 
-/// Snippet that execs the dashboard when Moshi exported `MOSHI_CLIENT`.
+/// Snippet that execs the dashboard when Moshi exported a truthy `MOSHI_CLIENT`.
 pub fn snippet() -> String {
     format!(
         "{BEGIN_MARKER}
 # Official cmux-moshi login-shell dashboard for Moshi clients.
-if [ -n \"${{MOSHI_CLIENT:-}}\" ] && [ \"${{MOSHI_CLIENT}}\" != \"0\" ]; then
-  if command -v cmux-moshi >/dev/null 2>&1; then
-    exec cmux-moshi dashboard
-  fi
-fi
+# Moshi Settings → MOSHI_CLIENT env toggle exports MOSHI_CLIENT=1.
+case \"${{MOSHI_CLIENT:-}}\" in
+  1|true|TRUE|yes|YES|on|ON)
+    if command -v cmux-moshi >/dev/null 2>&1; then
+      exec cmux-moshi dashboard
+    fi
+    ;;
+esac
 {END_MARKER}
 "
     )
@@ -151,6 +154,9 @@ mod tests {
         let text = fs::read_to_string(&rc).unwrap();
         assert!(text.contains(BEGIN_MARKER));
         assert!(text.contains("export PATH=/tmp/bin:$PATH"));
+        assert!(text.contains("case \"${MOSHI_CLIENT:-}\" in"));
+        assert!(text.contains("1|true|TRUE|yes|YES|on|ON)"));
+        assert!(!text.contains("[ \"${MOSHI_CLIENT}\" != \"0\" ]"));
         let again = install(&rc, t0).unwrap();
         assert!(again.message.contains("already present"));
         let removed = uninstall(&rc, UNIX_EPOCH + Duration::from_secs(1_700_000_001)).unwrap();

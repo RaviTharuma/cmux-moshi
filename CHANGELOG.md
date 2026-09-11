@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.1 — 2026-09-11
+
+Reliability and Moshi login UX fixes from upstream cmux / Moshi docs review.
+
+- Parse `debug.terminals` without treating bare `id` as a workspace id; fall
+  back to `last_known_workspace_id` when `workspace_id` is absent
+- Prefer the active tmux pane (`#{pane_active}`) for workspace env / command
+- `cleanup` never kills attached `ttys*` sessions
+- `install-shell` snippet matches dashboard/`is_truthy` (`1|true|yes|on`)
+- Dashboard: `y` / `sync` renames `ttys*` titles in-place
+- Doctor tips use Moshi’s MOSHI_CLIENT env toggle wording
+
 ## 0.2.0 — 2026-09-06
 
 Moshi host integration aligned with the official mux sidebar plugin

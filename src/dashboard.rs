@@ -5,6 +5,7 @@ use crate::doctor::is_truthy;
 use crate::error::Error;
 use crate::host::Host;
 use crate::mapping::{self, Snapshot};
+use crate::sync::{self, SyncOptions};
 use crate::titles::is_default_tty_session;
 use crate::tmux;
 use std::io::{BufRead, Write};
@@ -29,6 +30,8 @@ pub enum Choice {
     Refresh,
     /// Run orphan cleanup.
     Cleanup,
+    /// Rename `ttys*` sessions to friendly cmux titles.
+    Sync,
     /// Drop to a bare login-capable shell.
     BareShell,
     /// Leave the dashboard.
@@ -144,6 +147,7 @@ pub fn render(snapshot: &Snapshot, items: &[MenuItem]) -> String {
 
     out.push_str("\n  --------------------------------------------------\n");
     out.push_str("   r) Refresh\n");
+    out.push_str("   y) Sync ttys* titles\n");
     out.push_str("   c) Cleanup orphan ttys* sessions\n");
     out.push_str("   s) Bare shell\n");
     out.push_str("   q) Quit\n\n");
@@ -160,6 +164,7 @@ pub fn parse_choice(input: &str, items: &[MenuItem]) -> Choice {
     match trimmed.to_ascii_lowercase().as_str() {
         "q" | "quit" => Choice::Quit,
         "r" | "refresh" => Choice::Refresh,
+        "y" | "sync" | "rename" => Choice::Sync,
         "c" | "cleanup" => Choice::Cleanup,
         "s" | "shell" => Choice::BareShell,
         other => {
@@ -203,6 +208,10 @@ pub fn run(
         match parse_choice(&line, &items) {
             Choice::Quit => return Ok(()),
             Choice::Refresh => continue,
+            Choice::Sync => {
+                let plans = sync::run(host, SyncOptions::default())?;
+                writeln!(output, "\n{}\n", sync::format_report(&plans, false))?;
+            }
             Choice::Cleanup => {
                 let plans = cleanup::run(host, false)?;
                 writeln!(output, "\n{}\n", cleanup::format_report(&plans, false))?;
@@ -274,6 +283,8 @@ mod tests {
         assert!(matches!(parse_choice("1", &items), Choice::Attach(s) if s == "ttys001"));
         assert!(matches!(parse_choice("q", &items), Choice::Quit));
         assert!(matches!(parse_choice("r", &items), Choice::Refresh));
+        assert!(matches!(parse_choice("y", &items), Choice::Sync));
+        assert!(matches!(parse_choice("sync", &items), Choice::Sync));
         assert!(matches!(parse_choice("c", &items), Choice::Cleanup));
         assert!(matches!(parse_choice("s", &items), Choice::BareShell));
     }
@@ -284,6 +295,7 @@ mod tests {
         let text = render(&snap, &menu_items(&snap));
         assert!(text.contains("CMUX workspaces"));
         assert!(text.contains("Named tmux sessions"));
+        assert!(text.contains("Sync ttys* titles"));
         assert!(text.contains("Cleanup orphan"));
         assert!(text.contains("Bare shell"));
     }
