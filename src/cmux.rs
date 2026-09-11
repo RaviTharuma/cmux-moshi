@@ -18,8 +18,10 @@ pub struct WorkspaceTitle {
 pub struct DebugTerminal {
     /// TTY name (`ttys001`) when present.
     pub tty: Option<String>,
-    /// Workspace id.
+    /// Effective workspace id (live `workspace_id`, else `last_known_workspace_id`).
     pub workspace_id: Option<String>,
+    /// True when [`Self::workspace_id`] came only from `last_known_workspace_id`.
+    pub workspace_id_from_last_known: bool,
     /// Friendly title when the RPC includes one.
     pub title: Option<String>,
     /// Surface id if present.
@@ -165,10 +167,23 @@ pub fn title_index(probe: &RpcProbe) -> HashMapIndex {
                 .or_insert_with(|| title.clone());
         }
         if let (Some(tty), Some(title)) = (&term.tty, &term.title) {
-            index.by_tty.insert(normalize_tty(tty), title.clone());
+            let key = normalize_tty(tty);
+            // Prefer titles attached to a live workspace_id over last-known-only
+            // rows when multiple terminals share a TTY name.
+            if !term.workspace_id_from_last_known || !index.by_tty.contains_key(&key) {
+                index.by_tty.insert(key, title.clone());
+            }
         }
         if let (Some(tty), Some(id)) = (&term.tty, &term.workspace_id) {
-            index.tty_to_id.insert(normalize_tty(tty), id.clone());
+            let key = normalize_tty(tty);
+            match index.tty_to_id.get(&key) {
+                Some(_) if term.workspace_id_from_last_known => {
+                    // Keep an existing live binding; do not overwrite with last-known.
+                }
+                _ => {
+                    index.tty_to_id.insert(key, id.clone());
+                }
+            }
         }
     }
     index
@@ -227,17 +242,21 @@ fn terminal_from_value(value: &Value) -> Option<DebugTerminal> {
     // Upstream `debug.terminals` rows use workspace_id / surface_id / tty /
     // workspace_title / last_known_workspace_id. Never treat bare `id` as a
     // workspace id — that field (when present) is typically a surface id.
+    // JSON null (NSNull via v2OrNull) is skipped by string_field.
+    let live_workspace_id = string_field(obj, &["workspace_id", "workspaceId"]);
+    let last_known = string_field(
+        obj,
+        &["last_known_workspace_id", "lastKnownWorkspaceId"],
+    );
+    let (workspace_id, workspace_id_from_last_known) = match (live_workspace_id, last_known) {
+        (Some(id), _) => (Some(id), false),
+        (None, Some(id)) => (Some(id), true),
+        (None, None) => (None, false),
+    };
     Some(DebugTerminal {
         tty: string_field(obj, &["tty", "tty_name", "name"]),
-        workspace_id: string_field(
-            obj,
-            &[
-                "workspace_id",
-                "workspaceId",
-                "last_known_workspace_id",
-                "lastKnownWorkspaceId",
-            ],
-        ),
+        workspace_id,
+        workspace_id_from_last_known,
         title: string_field(
             obj,
             &[
@@ -328,10 +347,62 @@ mod tests {
             }]
         }));
         assert_eq!(terminals[0].workspace_id.as_deref(), Some("WS-LAST"));
+        assert!(terminals[0].workspace_id_from_last_known);
         assert_eq!(terminals[0].title.as_deref(), Some("inbox"));
         assert_ne!(
             terminals[0].workspace_id.as_deref(),
             Some("should-not-be-workspace")
         );
+    }
+
+    #[test]
+    fn terminal_parser_skips_null_workspace_id_for_last_known() {
+        let terminals = parse_debug_terminals(&serde_json::json!({
+            "terminals": [{
+                "tty": "ttys002",
+                "workspace_id": null,
+                "last_known_workspace_id": "FALLBACK-WS",
+                "workspace_title": "fallback-title"
+            }]
+        }));
+        assert_eq!(terminals[0].workspace_id.as_deref(), Some("FALLBACK-WS"));
+        assert!(terminals[0].workspace_id_from_last_known);
+    }
+
+    #[test]
+    fn title_index_prefers_live_workspace_id_over_stale_last_known_for_tty() {
+        let probe = RpcProbe {
+            reachable: true,
+            terminals: vec![
+                DebugTerminal {
+                    tty: Some("ttys001".into()),
+                    workspace_id: Some("stale-ws".into()),
+                    workspace_id_from_last_known: true,
+                    title: Some("stale".into()),
+                    surface_id: None,
+                },
+                DebugTerminal {
+                    tty: Some("/dev/ttys001".into()),
+                    workspace_id: Some("live-ws".into()),
+                    workspace_id_from_last_known: false,
+                    title: Some("live".into()),
+                    surface_id: Some("surf".into()),
+                },
+                DebugTerminal {
+                    tty: Some("ttys001".into()),
+                    workspace_id: Some("stale-again".into()),
+                    workspace_id_from_last_known: true,
+                    title: Some("stale-again".into()),
+                    surface_id: None,
+                },
+            ],
+            ..RpcProbe::default()
+        };
+        let index = title_index(&probe);
+        assert_eq!(
+            index.tty_to_id.get("ttys001").map(String::as_str),
+            Some("live-ws")
+        );
+        assert_eq!(index.by_tty.get("ttys001").map(String::as_str), Some("live"));
     }
 }

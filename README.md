@@ -35,7 +35,7 @@ channel, so this repo also carries a valid `cmux-plugin.toml`. That packaging
 can install the repo; `plugin use` is optional and hosts a small generic
 workspace picker. It is not a Moshi panel.
 
-Current source version: **v0.2.1**.
+Current source version: **v0.2.2**.
 
 > **Deutsch (kurz):** Moshi-Host-Integration, keine Sidebar-App. Die Phone-App
 > sieht die cmux-Linke-Sidebar nie. Produkt ist die CLI (`sync`, Dashboard,
