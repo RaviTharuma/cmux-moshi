@@ -76,6 +76,7 @@ fn install_and_uninstall_shell_use_temp_rc() {
 }
 
 #[test]
+#[cfg(not(target_os = "macos"))]
 fn install_launchagent_skips_off_macos_without_writing() {
     let dir = tempfile::tempdir().unwrap();
     let agents = dir.path().join("LaunchAgents");
@@ -91,18 +92,50 @@ fn install_launchagent_skips_off_macos_without_writing() {
         String::from_utf8_lossy(&output.stderr)
     );
     let stdout = String::from_utf8_lossy(&output.stdout);
-    // On Linux CI this skips; on macOS runners it would install if launchctl works.
-    if cfg!(target_os = "macos") {
-        assert!(
-            stdout.contains("LaunchAgent")
-                || stdout.contains("installed")
-                || stdout.contains("macOS"),
-            "{stdout}"
-        );
-    } else {
-        assert!(stdout.contains("macOS-only"), "{stdout}");
-        assert!(!agents.join("com.cmux-moshi.sync.plist").exists());
-    }
+    assert!(stdout.contains("macOS-only"), "{stdout}");
+    assert!(!agents.join("com.cmux-moshi.sync.plist").exists());
+}
+
+/// On macOS the real binary would call `launchctl`. Keep CI hermetic with stubs
+/// on PATH and a temp `--agents-dir` (same idea as FakeHost unit tests).
+#[test]
+#[cfg(target_os = "macos")]
+fn install_launchagent_writes_plist_with_stub_launchctl() {
+    use std::os::unix::fs::PermissionsExt;
+
+    let dir = tempfile::tempdir().unwrap();
+    let agents = dir.path().join("LaunchAgents");
+    let stub_bin = dir.path().join("bin");
+    std::fs::create_dir_all(&stub_bin).unwrap();
+
+    let uname = stub_bin.join("uname");
+    std::fs::write(&uname, "#!/bin/sh\necho Darwin\n").unwrap();
+    std::fs::set_permissions(&uname, std::fs::Permissions::from_mode(0o755)).unwrap();
+
+    let launchctl = stub_bin.join("launchctl");
+    std::fs::write(&launchctl, "#!/bin/sh\nexit 0\n").unwrap();
+    std::fs::set_permissions(&launchctl, std::fs::Permissions::from_mode(0o755)).unwrap();
+
+    let output = bin()
+        .args(["install-launchagent", "--agents-dir"])
+        .arg(&agents)
+        .env("PATH", stub_bin.display().to_string())
+        .output()
+        .expect("install-launchagent");
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(
+        stdout.contains("installed LaunchAgent") || stdout.contains("already installed"),
+        "{stdout}"
+    );
+    let plist = agents.join("com.cmux-moshi.sync.plist");
+    assert!(plist.is_file(), "expected plist at {}", plist.display());
+    let body = std::fs::read_to_string(&plist).unwrap();
+    assert!(body.contains("com.cmux-moshi.sync"));
 }
 
 #[test]
