@@ -30,7 +30,7 @@ Forbidden in this repo:
 [plugin]
 name = "moshi"          # short [a-z0-9-_]+ ; repo name stays cmux-moshi
 kind = "sidebar"
-version = "0.2.2"
+version = "0.3.0"
 description = "Moshi host CLI plus an optional workspace picker"
 
 [run]
@@ -48,7 +48,9 @@ Install layout (from the spec):
 ```
 
 `[build]` is the official `cargo build --release`. `bin/cmux-moshi-fetch` is
-a contributor helper only.
+a contributor helper only: on GitHub Releases it downloads
+`cmux-moshi-$VERSION-$TARGET` after verifying `SHA256SUMS`, else builds from
+source. Do not put fetch into `[build]`.
 
 ## Install / use / reload
 
@@ -118,6 +120,7 @@ release build):
 | `dashboard` | Moshi login-shell menu |
 | `cleanup` | Idle `ttys*` shells only |
 | `install-shell` / `uninstall-shell` | Optional `~/.zshrc` snippet |
+| `install-launchagent` / `uninstall-launchagent` | Optional macOS periodic sync |
 
 Phone clients attach over Mosh/SSH and use this CLI. They do not get the
 mux sidebar PTY.

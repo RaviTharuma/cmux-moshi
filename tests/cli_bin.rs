@@ -12,7 +12,7 @@ fn version_and_help_list_product_commands() {
     assert!(version.status.success());
     let stdout = String::from_utf8_lossy(&version.stdout);
     assert!(stdout.contains("cmux-moshi"));
-    assert!(stdout.contains("0.2.2"));
+    assert!(stdout.contains("0.3.0"));
 
     let help = bin().arg("--help").output().expect("help");
     assert!(help.status.success());
@@ -25,6 +25,8 @@ fn version_and_help_list_product_commands() {
         "cleanup",
         "install-shell",
         "uninstall-shell",
+        "install-launchagent",
+        "uninstall-launchagent",
     ] {
         assert!(text.contains(needle), "help missing {needle}: {text}");
     }
@@ -71,6 +73,36 @@ fn install_and_uninstall_shell_use_temp_rc() {
     let after = std::fs::read_to_string(&rc).unwrap();
     assert!(!after.contains(">>> cmux-moshi begin"));
     assert!(after.contains("# user config"));
+}
+
+#[test]
+fn install_launchagent_skips_off_macos_without_writing() {
+    let dir = tempfile::tempdir().unwrap();
+    let agents = dir.path().join("LaunchAgents");
+    let output = bin()
+        .args(["install-launchagent", "--agents-dir"])
+        .arg(&agents)
+        .env("PATH", dir_without_cmux())
+        .output()
+        .expect("install-launchagent");
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    // On Linux CI this skips; on macOS runners it would install if launchctl works.
+    if cfg!(target_os = "macos") {
+        assert!(
+            stdout.contains("LaunchAgent")
+                || stdout.contains("installed")
+                || stdout.contains("macOS"),
+            "{stdout}"
+        );
+    } else {
+        assert!(stdout.contains("macOS-only"), "{stdout}");
+        assert!(!agents.join("com.cmux-moshi.sync.plist").exists());
+    }
 }
 
 #[test]

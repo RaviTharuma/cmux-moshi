@@ -2,7 +2,7 @@
 
 `cmux-moshi` is a **Moshi host integration** implemented in Rust. The
 product is the `cmux-moshi` CLI (`doctor`, `list`, `sync`, `dashboard`,
-`cleanup`, `install-shell`). Moshi phones connect over Mosh/SSH and never
+`cleanup`, `install-shell`, `install-launchagent`). Moshi phones connect over Mosh/SSH and never
 see the cmux left sidebar.
 
 Official cmux only distributes git plugins via the mux sidebar plugin

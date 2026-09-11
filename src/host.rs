@@ -210,6 +210,11 @@ pub fn default_zshrc_path(env: &dyn Fn(&str) -> Option<String>) -> PathBuf {
     PathBuf::from(home).join(".zshrc")
 }
 
+/// Default macOS LaunchAgents directory from the environment (never a hardcoded home).
+pub fn default_launch_agents_dir(env: &dyn Fn(&str) -> Option<String>) -> PathBuf {
+    crate::launchagent::default_agents_dir(env)
+}
+
 /// Programmable host for hermetic tests.
 #[derive(Clone, Debug, Default)]
 pub struct FakeHost {

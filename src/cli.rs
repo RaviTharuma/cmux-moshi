@@ -5,6 +5,7 @@ use crate::dashboard;
 use crate::doctor;
 use crate::error::Error;
 use crate::host::{self, Host, RealHost};
+use crate::launchagent;
 use crate::mapping;
 use crate::shell;
 use crate::sync::{self, SyncOptions};
@@ -73,6 +74,20 @@ enum Command {
         #[arg(long)]
         rc_file: Option<PathBuf>,
     },
+    /// Install the macOS LaunchAgent that runs `sync` every five minutes.
+    #[command(name = "install-launchagent")]
+    InstallLaunchAgent {
+        /// LaunchAgents directory (tests / custom HOME). Defaults to $HOME/Library/LaunchAgents.
+        #[arg(long)]
+        agents_dir: Option<PathBuf>,
+    },
+    /// Unload and remove the macOS LaunchAgent plist.
+    #[command(name = "uninstall-launchagent")]
+    UninstallLaunchAgent {
+        /// LaunchAgents directory.
+        #[arg(long)]
+        agents_dir: Option<PathBuf>,
+    },
 }
 
 /// Parses argv and runs the selected command against `host`.
@@ -132,6 +147,20 @@ where
             print_shell_change(&change)?;
             Ok(0)
         }
+        Some(Command::InstallLaunchAgent { agents_dir }) => {
+            let path = resolve_agents_dir(host, agents_dir)?;
+            let change = launchagent::install(host, &path)?;
+            println!("{}", change.message);
+            io::stdout().flush()?;
+            Ok(0)
+        }
+        Some(Command::UninstallLaunchAgent { agents_dir }) => {
+            let path = resolve_agents_dir(host, agents_dir)?;
+            let change = launchagent::uninstall(host, &path)?;
+            println!("{}", change.message);
+            io::stdout().flush()?;
+            Ok(0)
+        }
     }
 }
 
@@ -149,6 +178,13 @@ fn resolve_rc(host: &dyn Host, rc_file: Option<PathBuf>) -> Result<PathBuf, Erro
         return Ok(path);
     }
     Ok(host::default_zshrc_path(&|key| host.env(key)))
+}
+
+fn resolve_agents_dir(host: &dyn Host, agents_dir: Option<PathBuf>) -> Result<PathBuf, Error> {
+    if let Some(path) = agents_dir {
+        return Ok(path);
+    }
+    Ok(host::default_launch_agents_dir(&|key| host.env(key)))
 }
 
 fn print_shell_change(change: &shell::ShellChange) -> Result<(), Error> {

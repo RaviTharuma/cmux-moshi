@@ -1,6 +1,6 @@
 [package]
 name = "cmux-moshi"
-version = "0.2.2"
+version = "0.3.0"
 edition = "2021"
 rust-version = "1.88"
 description = "Moshi host integration for cmux: friendly workspace titles on tmux sessions"
