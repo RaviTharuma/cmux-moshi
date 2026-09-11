@@ -2,6 +2,7 @@
 
 use crate::cmux;
 use crate::host::Host;
+use crate::launchagent;
 use std::fmt::Write as _;
 
 /// One doctor check.
@@ -34,6 +35,7 @@ pub fn run(host: &dyn Host) -> Vec<Check> {
         mosh_check(host),
         rpc_check(host),
         moshi_client_check(host),
+        launchagent::status_check(host),
     ];
     if host.which("cmux") {
         if let Ok(out) = host.run("cmux", &["--version"]) {
@@ -79,7 +81,7 @@ pub fn format_report(checks: &[Check]) -> (String, i32) {
         let _ = writeln!(out, "  [{mark}] {:<22} {}", check.name, check.detail);
     }
     out.push_str("\nTips\n");
-    out.push_str("  • Host CLI (the product): cmux-moshi doctor|list|sync|dashboard|cleanup\n");
+    out.push_str("  • Host CLI (the product): cmux-moshi doctor|list|sync|dashboard|cleanup|install-shell|install-launchagent\n");
     out.push_str(
         "  • Install packaging: cmux sidebar plugin install https://github.com/RaviTharuma/cmux-moshi.git\n",
     );
@@ -91,6 +93,7 @@ pub fn format_report(checks: &[Check]) -> (String, i32) {
     );
     out.push_str("  • Then run: cmux-moshi dashboard   or   cmux-moshi install-shell\n");
     out.push_str("  • Dashboard: y syncs ttys* titles; c cleans idle orphans\n");
+    out.push_str("  • Optional macOS periodic sync: cmux-moshi install-launchagent\n");
     (out, if failed { 1 } else { 0 })
 }
 
@@ -200,6 +203,10 @@ mod tests {
         let (report, code) = format_report(&checks);
         assert_eq!(code, 1);
         assert!(report.contains("MOSHI_CLIENT env toggle"));
+        assert!(report.contains("install-launchagent"));
+        assert!(checks
+            .iter()
+            .any(|c| c.name == "LaunchAgent" && c.status == Status::Warn));
     }
 
     #[test]

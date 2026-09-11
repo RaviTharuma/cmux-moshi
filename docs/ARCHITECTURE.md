@@ -35,6 +35,7 @@ Layers:
 | `cleanup` | Kill only idle-shell `ttys*` sessions |
 | `dashboard` | Numbered attach menu for Moshi login shells |
 | `shell` | Optional zshrc snippet with backup |
+| `launchagent` | Optional macOS LaunchAgent install/unload |
 | `doctor` | Degrading diagnostics |
 | `cli` | clap dispatch for the host CLI |
 | `sidebar` | Optional workspace picker (plugin `[run]`) |
@@ -42,4 +43,5 @@ Layers:
 The plugin manager clones this repo and runs `[build]`
 (`cargo build --release`) then verifies `[run]`
 (`target/release/cmux-moshi-sidebar`). `bin/cmux-moshi` prefers that
-release CLI. `bin/cmux-moshi-fetch` is a contributor helper, not `[build]`.
+release CLI. `bin/cmux-moshi-fetch` downloads versioned release assets when
+present, otherwise builds from source. It is a contributor helper, not `[build]`.

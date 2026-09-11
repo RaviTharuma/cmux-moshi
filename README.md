@@ -26,7 +26,7 @@ needs on the Mac is:
 
 1. Friendly cmux workspace titles copied onto tmux session names (`ttys*` → title)
 2. A login-shell dashboard when Moshi exports `MOSHI_CLIENT=1`
-3. `doctor`, `cleanup`, and optional `install-shell`
+3. `doctor`, `cleanup`, optional `install-shell`, and optional LaunchAgent helpers
 
 The product is the **`cmux-moshi` CLI** (and an optional LaunchAgent that runs
 `sync`). Official cmux only ships git plugins through the
@@ -35,7 +35,7 @@ channel, so this repo also carries a valid `cmux-plugin.toml`. That packaging
 can install the repo; `plugin use` is optional and hosts a small generic
 workspace picker. It is not a Moshi panel.
 
-Current source version: **v0.2.2**.
+Current source version: **v0.3.0**.
 
 > **Deutsch (kurz):** Moshi-Host-Integration, keine Sidebar-App. Die Phone-App
 > sieht die cmux-Linke-Sidebar nie. Produkt ist die CLI (`sync`, Dashboard,
@@ -78,10 +78,17 @@ cmux-moshi dashboard
 `install-shell` backs up the rc file first. Remove the snippet with
 `cmux-moshi uninstall-shell`.
 
-Periodic rename without a login snippet: copy
-[`scripts/com.cmux-moshi.sync.plist`](scripts/com.cmux-moshi.sync.plist) to
-`~/Library/LaunchAgents/` and `launchctl load` it (macOS). It runs
-`cmux-moshi sync` every five minutes.
+Periodic rename without a login snippet (macOS):
+
+```bash
+cmux-moshi install-launchagent     # write + launchctl load
+cmux-moshi uninstall-launchagent   # unload + remove plist
+```
+
+This installs [`scripts/com.cmux-moshi.sync.plist`](scripts/com.cmux-moshi.sync.plist)
+into `$HOME/Library/LaunchAgents/` and loads it. It runs `cmux-moshi sync`
+every five minutes. On non-macOS hosts the commands skip with a clear message.
+Manual `cp` + `launchctl load` still works if you prefer.
 
 Contributors can also build locally:
 
@@ -90,8 +97,9 @@ cargo build --release
 ./target/release/cmux-moshi doctor
 ```
 
-`bin/cmux-moshi-fetch` is a contributor helper (release asset or source
-build). It is **not** the official `[build]` command.
+`bin/cmux-moshi-fetch` is a contributor helper. On tagged releases it downloads
+a per-OS/arch binary and verifies `SHA256SUMS`; otherwise it falls back to a
+source build. It is **not** the official `[build]` command.
 
 ## Optional: in-cmux workspace picker
 
@@ -137,6 +145,8 @@ This repo does **not** install interpreted sidebars under
 | `cleanup` | Kill detached idle-shell `ttys*` sessions; keep attached / `claude`/`node`/`python`/… |
 | `install-shell` | Insert a marked snippet into `~/.zshrc` (or `--rc-file`); backup first |
 | `uninstall-shell` | Remove the marked snippet |
+| `install-launchagent` | macOS: install + `launchctl load` periodic sync (`--agents-dir`) |
+| `uninstall-launchagent` | macOS: unload + remove the LaunchAgent plist |
 | `--version` / `--help` | Version and command list |
 
 ```bash

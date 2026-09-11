@@ -13,6 +13,7 @@ pub mod dashboard;
 pub mod doctor;
 pub mod error;
 pub mod host;
+pub mod launchagent;
 pub mod mapping;
 pub mod procenv;
 pub mod shell;

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.0 — 2026-09-11
+
+Deferred host helpers: LaunchAgent automation and versioned fetch assets.
+
+- `install-launchagent` / `uninstall-launchagent` write, load, and remove
+  `com.cmux-moshi.sync` under `$HOME/Library/LaunchAgents` (macOS; skipped
+  elsewhere). Idempotent; tests use temp dirs / FakeHost
+- `doctor` reports LaunchAgent status (warn when missing or non-macOS)
+- GitHub Actions `release` workflow publishes per-OS/arch `cmux-moshi`
+  binaries plus `SHA256SUMS` so `bin/cmux-moshi-fetch` can download instead of
+  always falling back to source build. Official plugin `[build]` remains
+  `cargo build --release`
+
 ## 0.2.2 — 2026-09-11
 
 Pass-2 reliability fixes after upstream `debug.terminals` re-read.
