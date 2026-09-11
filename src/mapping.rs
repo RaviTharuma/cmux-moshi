@@ -227,12 +227,8 @@ mod tests {
     fn falls_back_to_tty_index_when_process_env_missing() {
         let host = FakeHost::default();
         let mut index = HashMapIndex::default();
-        index
-            .tty_to_id
-            .insert("ttys001".into(), "from-tty".into());
-        index
-            .by_id
-            .insert("from-tty".into(), "tty-title".into());
+        index.tty_to_id.insert("ttys001".into(), "from-tty".into());
+        index.by_id.insert("from-tty".into(), "tty-title".into());
         let rows = join_rows(
             &[TmuxSession {
                 name: "ttys001".into(),

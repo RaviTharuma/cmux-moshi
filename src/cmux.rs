@@ -244,10 +244,7 @@ fn terminal_from_value(value: &Value) -> Option<DebugTerminal> {
     // workspace id — that field (when present) is typically a surface id.
     // JSON null (NSNull via v2OrNull) is skipped by string_field.
     let live_workspace_id = string_field(obj, &["workspace_id", "workspaceId"]);
-    let last_known = string_field(
-        obj,
-        &["last_known_workspace_id", "lastKnownWorkspaceId"],
-    );
+    let last_known = string_field(obj, &["last_known_workspace_id", "lastKnownWorkspaceId"]);
     let (workspace_id, workspace_id_from_last_known) = match (live_workspace_id, last_known) {
         (Some(id), _) => (Some(id), false),
         (None, Some(id)) => (Some(id), true),
@@ -403,6 +400,9 @@ mod tests {
             index.tty_to_id.get("ttys001").map(String::as_str),
             Some("live-ws")
         );
-        assert_eq!(index.by_tty.get("ttys001").map(String::as_str), Some("live"));
+        assert_eq!(
+            index.by_tty.get("ttys001").map(String::as_str),
+            Some("live")
+        );
     }
 }
