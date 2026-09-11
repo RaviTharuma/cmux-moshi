@@ -35,7 +35,7 @@ channel, so this repo also carries a valid `cmux-plugin.toml`. That packaging
 can install the repo; `plugin use` is optional and hosts a small generic
 workspace picker. It is not a Moshi panel.
 
-Current source version: **v0.2.0**.
+Current source version: **v0.2.1**.
 
 > **Deutsch (kurz):** Moshi-Host-Integration, keine Sidebar-App. Die Phone-App
 > sieht die cmux-Linke-Sidebar nie. Produkt ist die CLI (`sync`, Dashboard,
@@ -66,8 +66,8 @@ cmux-moshi list
 cmux-moshi sync
 ```
 
-On the iPhone / iPad, open Moshi → **Settings → Integrations → Export ENV**
-(this sets `MOSHI_CLIENT=1` on connect). Then either:
+On the iPhone / iPad, open Moshi → **Settings** and enable the
+**MOSHI_CLIENT** env toggle (exports `MOSHI_CLIENT=1` on connect). Then either:
 
 ```bash
 cmux-moshi install-shell    # optional: exec dashboard from ~/.zshrc
@@ -133,8 +133,8 @@ This repo does **not** install interpreted sidebars under
 | `doctor` | Check `cmux` on PATH, `tmux`, optional `mosh`, `cmux rpc` reachability, `MOSHI_CLIENT` tips |
 | `list` | Live map: tmux session ↔ `CMUX_WORKSPACE_ID` ↔ friendly title (`--json`) |
 | `sync` / `rename` | Rename only sessions still named `ttys*` to the cmux title (idempotent; `--force`, `--dry-run`) |
-| `dashboard` | Numbered menu for Moshi login shells (`MOSHI_CLIENT=1` or `--force`): attach, refresh, cleanup, bare shell, quit |
-| `cleanup` | Kill `ttys*` sessions whose pane tree is only an idle shell (`zsh`/`bash`/`sh`); keep `claude`/`node`/`python`/… |
+| `dashboard` | Numbered menu for Moshi login shells (`MOSHI_CLIENT=1` or `--force`): attach, refresh, sync titles, cleanup, bare shell, quit |
+| `cleanup` | Kill detached idle-shell `ttys*` sessions; keep attached / `claude`/`node`/`python`/… |
 | `install-shell` | Insert a marked snippet into `~/.zshrc` (or `--rc-file`); backup first |
 | `uninstall-shell` | Remove the marked snippet |
 | `--version` / `--help` | Version and command list |
@@ -151,12 +151,13 @@ cmux-moshi dashboard --force
 
 Every CLI command rebuilds the map live. No cache.
 
-1. `tmux list-sessions` and `tmux list-panes` for names, attach state, pane pid, and pane command
-2. Process environment of the pane (and parents) for `CMUX_WORKSPACE_ID`
+1. `tmux list-sessions` and `tmux list-panes` for names, attach state, active pane pid/command
+2. Process environment of the active pane (and parents) for `CMUX_WORKSPACE_ID`
 3. Public `cmux` CLI: `cmux rpc debug.terminals`, `cmux rpc workspace.list` (doctor also tries `cmux identify --json`)
 
 `sync` only touches default `ttys*` names unless you pass `--force`.
-`cleanup` only kills `ttys*` sessions whose pane and children are idle shells.
+`cleanup` only kills detached `ttys*` sessions whose pane and children are idle shells.
+The dashboard can run sync (`y`) and cleanup (`c`) without leaving the menu.
 
 The optional picker talks to the mux control socket (`CMUX_TUI_SOCKET`,
 legacy `CMUX_MUX_SOCKET`) through the `cmux-client` crate: `identify`,
@@ -168,7 +169,7 @@ legacy `CMUX_MUX_SOCKET`) through the `cmux-client` crate: `identify`,
   `cmux-tui plugin` alias on older builds)
 - `tmux`
 - `mosh` / `mosh-server` optional (Moshi can use SSH)
-- [Moshi](https://getmoshi.app) with Export ENV enabled for the dashboard
+- [Moshi](https://getmoshi.app) with the MOSHI_CLIENT env toggle enabled for the dashboard
 - Contributors building from source: Rust 1.88+ / Cargo
 
 ## Development

@@ -27,6 +27,7 @@ fn list_table_includes_workspace_id_and_title() {
             session: "ttys012".into(),
             pid: 7,
             command: "zsh".into(),
+            active: true,
         }],
         &index,
         &host,
