@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.2 — 2026-09-11
+
+Pass-2 reliability fixes after upstream `debug.terminals` re-read.
+
+- `cleanup` keeps `ttys*` sessions when pane command/pid is unknown (no more
+  kill-on-missing-pane races)
+- `install-shell` upgrades stale marked snippets (pre-0.2.1 `!= 0` gate) while
+  staying idempotent for the current truthy `case` snippet
+- Prefer live `workspace_id` over `last_known_workspace_id` when indexing the
+  same TTY; treat JSON null `workspace_id` as absent and fall through to
+  last-known; cover tty-index mapping fallback in tests
+
 ## 0.2.1 — 2026-09-11
 
 Reliability and Moshi login UX fixes from upstream cmux / Moshi docs review.

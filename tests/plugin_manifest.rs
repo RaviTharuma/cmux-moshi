@@ -7,7 +7,7 @@ fn cmux_plugin_toml_matches_official_shape() {
     let text = fs::read_to_string("cmux-plugin.toml").expect("cmux-plugin.toml");
     assert!(text.contains("name = \"moshi\""));
     assert!(text.contains("kind = \"sidebar\""));
-    assert!(text.contains("version = \"0.2.1\""));
+    assert!(text.contains("version = \"0.2.2\""));
     assert!(text.contains("command = [\"target/release/cmux-moshi-sidebar\"]"));
     assert!(text.contains("command = [\"cargo\", \"build\", \"--release\"]"));
     assert!(!text.contains("bin/cmux-moshi-fetch"));
@@ -17,9 +17,9 @@ fn cmux_plugin_toml_matches_official_shape() {
 #[test]
 fn version_files_agree() {
     let version = fs::read_to_string("VERSION").expect("VERSION");
-    assert_eq!(version.trim(), "0.2.1");
+    assert_eq!(version.trim(), "0.2.2");
     let cargo = fs::read_to_string("Cargo.toml").expect("Cargo.toml");
-    assert!(cargo.contains("version = \"0.2.1\""));
+    assert!(cargo.contains("version = \"0.2.2\""));
 }
 
 #[test]

@@ -40,17 +40,35 @@ pub struct ShellChange {
 }
 
 /// Inserts the snippet at the top of `rc_path`, backing up first.
+///
+/// Idempotent when the current snippet is already installed. If an older
+/// marked block is present (for example the pre-0.2.1 `!= 0` gate), replaces
+/// it in place so truthy `MOSHI_CLIENT` matching stays aligned with doctor /
+/// dashboard.
 pub fn install(rc_path: &Path, now: SystemTime) -> Result<ShellChange, Error> {
     let existing = if rc_path.exists() {
         fs::read_to_string(rc_path)?
     } else {
         String::new()
     };
-    if existing.contains(BEGIN_MARKER) && existing.contains(END_MARKER) {
+    let desired = snippet();
+    if let Some(current) = extract_snippet_block(&existing) {
+        if normalize_snippet_text(&current) == normalize_snippet_text(&desired) {
+            return Ok(ShellChange {
+                rc_path: rc_path.to_path_buf(),
+                backup_path: None,
+                message: format!("snippet already present in {}", rc_path.display()),
+            });
+        }
+        let backup = backup_path(rc_path, now);
+        fs::copy(rc_path, &backup)?;
+        let stripped = strip_snippet(&existing);
+        let next = prepend_snippet(&desired, &stripped);
+        fs::write(rc_path, next)?;
         return Ok(ShellChange {
             rc_path: rc_path.to_path_buf(),
-            backup_path: None,
-            message: format!("snippet already present in {}", rc_path.display()),
+            backup_path: Some(backup),
+            message: format!("upgraded dashboard snippet in {}", rc_path.display()),
         });
     }
     let backup = backup_path(rc_path, now);
@@ -59,22 +77,68 @@ pub fn install(rc_path: &Path, now: SystemTime) -> Result<ShellChange, Error> {
     } else if let Some(parent) = rc_path.parent() {
         fs::create_dir_all(parent)?;
     }
-    let mut next = snippet();
-    if !existing.is_empty() {
-        if !next.ends_with('\n') {
-            next.push('\n');
-        }
-        next.push_str(&existing);
-        if !existing.ends_with('\n') {
-            next.push('\n');
-        }
-    }
+    let next = prepend_snippet(&desired, &existing);
     fs::write(rc_path, next)?;
     Ok(ShellChange {
         rc_path: rc_path.to_path_buf(),
         backup_path: Some(backup),
         message: format!("installed dashboard snippet into {}", rc_path.display()),
     })
+}
+
+fn prepend_snippet(desired: &str, existing: &str) -> String {
+    let mut next = desired.to_string();
+    if !existing.is_empty() {
+        if !next.ends_with('\n') {
+            next.push('\n');
+        }
+        next.push_str(existing);
+        if !existing.ends_with('\n') {
+            next.push('\n');
+        }
+    }
+    next
+}
+
+/// Returns the marked snippet block including begin/end markers, if present.
+pub fn extract_snippet_block(source: &str) -> Option<String> {
+    let mut out = String::new();
+    let mut copying = false;
+    let mut found_end = false;
+    for line in source.lines() {
+        if line.trim() == BEGIN_MARKER {
+            copying = true;
+            out.push_str(BEGIN_MARKER);
+            out.push('\n');
+            continue;
+        }
+        if line.trim() == END_MARKER {
+            if copying {
+                out.push_str(END_MARKER);
+                out.push('\n');
+                found_end = true;
+            }
+            break;
+        }
+        if copying {
+            out.push_str(line);
+            out.push('\n');
+        }
+    }
+    if found_end {
+        Some(out)
+    } else {
+        None
+    }
+}
+
+fn normalize_snippet_text(text: &str) -> String {
+    text.lines()
+        .map(str::trim_end)
+        .collect::<Vec<_>>()
+        .join("\n")
+        .trim()
+        .to_string()
 }
 
 /// Removes the marked snippet block.
@@ -164,5 +228,32 @@ mod tests {
         let after = fs::read_to_string(&rc).unwrap();
         assert!(!after.contains(BEGIN_MARKER));
         assert!(after.contains("export PATH=/tmp/bin:$PATH"));
+    }
+
+    #[test]
+    fn install_upgrades_stale_marked_snippet() {
+        let dir = tempfile::tempdir().unwrap();
+        let rc = dir.path().join(".zshrc");
+        let stale = format!(
+            "{BEGIN_MARKER}
+# old gate
+if [ \"${{MOSHI_CLIENT}}\" != \"0\" ]; then
+  exec cmux-moshi dashboard
+fi
+{END_MARKER}
+# keep me
+"
+        );
+        fs::write(&rc, &stale).unwrap();
+        let t0 = UNIX_EPOCH + Duration::from_secs(1_700_000_100);
+        let change = install(&rc, t0).unwrap();
+        assert!(change.message.contains("upgraded"));
+        assert!(change.backup_path.is_some());
+        let text = fs::read_to_string(&rc).unwrap();
+        assert!(text.contains("1|true|TRUE|yes|YES|on|ON)"));
+        assert!(!text.contains("[ \"${MOSHI_CLIENT}\" != \"0\" ]"));
+        assert!(text.contains("# keep me"));
+        let again = install(&rc, t0).unwrap();
+        assert!(again.message.contains("already present"));
     }
 }

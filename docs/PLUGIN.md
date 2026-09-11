@@ -30,7 +30,7 @@ Forbidden in this repo:
 [plugin]
 name = "moshi"          # short [a-z0-9-_]+ ; repo name stays cmux-moshi
 kind = "sidebar"
-version = "0.2.1"
+version = "0.2.2"
 description = "Moshi host CLI plus an optional workspace picker"
 
 [run]

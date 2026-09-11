@@ -12,7 +12,7 @@ fn version_and_help_list_product_commands() {
     assert!(version.status.success());
     let stdout = String::from_utf8_lossy(&version.stdout);
     assert!(stdout.contains("cmux-moshi"));
-    assert!(stdout.contains("0.2.1"));
+    assert!(stdout.contains("0.2.2"));
 
     let help = bin().arg("--help").output().expect("help");
     assert!(help.status.success());

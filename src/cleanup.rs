@@ -97,14 +97,21 @@ fn classify(row: &SessionRow, host: &dyn Host) -> CleanupPlan {
             reason: "attached session".into(),
         };
     }
-    if let Some(cmd) = &row.pane_command {
-        if !is_idle_shell(cmd) {
-            return CleanupPlan {
-                session: row.session.clone(),
-                kill: false,
-                reason: format!("pane running {cmd}"),
-            };
-        }
+    // Never kill when pane state is missing — list-panes races / empty
+    // command strings would otherwise look like idle orphans.
+    let Some(cmd) = row.pane_command.as_deref() else {
+        return CleanupPlan {
+            session: row.session.clone(),
+            kill: false,
+            reason: "pane command unknown".into(),
+        };
+    };
+    if !is_idle_shell(cmd) {
+        return CleanupPlan {
+            session: row.session.clone(),
+            kill: false,
+            reason: format!("pane running {cmd}"),
+        };
     }
     if let Some(pid) = row.pane_pid {
         if let Some(busy) = busy_descendant(host, pid) {
@@ -114,6 +121,12 @@ fn classify(row: &SessionRow, host: &dyn Host) -> CleanupPlan {
                 reason: format!("child process {busy} still running"),
             };
         }
+    } else {
+        return CleanupPlan {
+            session: row.session.clone(),
+            kill: false,
+            reason: "pane pid unknown".into(),
+        };
     }
     CleanupPlan {
         session: row.session.clone(),
@@ -199,6 +212,22 @@ mod tests {
         let plans = plan(&snap(vec![attached]), &host);
         assert!(!plans[0].kill);
         assert!(plans[0].reason.contains("attached"));
+    }
+
+    #[test]
+    fn keeps_ttys_when_pane_state_unknown() {
+        let host = FakeHost::default();
+        let unknown = SessionRow {
+            session: "ttys010".into(),
+            attached: false,
+            workspace_id: None,
+            title: None,
+            pane_command: None,
+            pane_pid: None,
+        };
+        let plans = plan(&snap(vec![unknown]), &host);
+        assert!(!plans[0].kill);
+        assert!(plans[0].reason.contains("unknown"));
     }
 
     #[test]
