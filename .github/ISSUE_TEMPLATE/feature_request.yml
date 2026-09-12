@@ -16,6 +16,8 @@ body:
       options:
         - label: I searched existing issues and did not find a duplicate
           required: true
+        - label: I accept DISCLAIMER.md and TERMS.md (maintainers have no liability for contributions or spend)
+          required: true
         - label: This stays within cmux-moshi scope (host CLI / optional packaging), not a left-sidebar Moshi product
           required: true
   - type: textarea
