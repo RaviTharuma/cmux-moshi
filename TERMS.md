@@ -73,12 +73,18 @@ Opening a pull request, issue, discussion, or patch means you agree that:
    costs, and expenses (including reasonable legal fees) arising from your
    contribution or from your breach of these terms.
 
-## 7. No duty to monitor or continue the project
+## 7. No duty to monitor, review, or continue the project
 
 Maintainers have **no obligation** to monitor issues, PRs, dependencies,
-releases, or downstream use, and **no obligation** to keep the project alive,
-secure, or compatible. Silence is not approval. Security processes in
-[SECURITY.md](SECURITY.md) are voluntary process notes, not warranties or SLAs.
+releases, or downstream use; **no obligation** to review contributions before
+merge; and **no obligation** to keep the project alive, secure, or compatible.
+Silence is not approval. Security processes in [SECURITY.md](SECURITY.md) are
+voluntary process notes, not warranties or SLAs.
+
+Maintainers may **disable issues, pull requests, and discussions**, lock the
+repository, or restrict contributions to invited collaborators at any time,
+without liability. Public contribution channels, when open, are a convenience
+only — not a promise of review or a transfer of risk onto maintainers.
 
 ## 8. Forks, employers, and redistribution
 

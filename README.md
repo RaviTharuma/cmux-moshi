@@ -26,9 +26,12 @@
 > **Free software — use at your own risk.** This is an unofficial hobby project
 > provided **AS IS**. Authors/maintainers accept **no liability** for
 > supply-chain attacks, cloud/CI/AI credit burn, host damage, or malicious /
-> defective contributor code (including accidental merges). By using or
-> contributing you accept [NOTICE.md](NOTICE.md), [DISCLAIMER.md](DISCLAIMER.md),
-> and [TERMS.md](TERMS.md). If that is unacceptable, do not download this repo.
+> defective contributor code (including accidental merges). There is **no duty
+> to review** PRs; public issues/PRs may be disabled. By using or contributing
+> you accept [NOTICE.md](NOTICE.md), [DISCLAIMER.md](DISCLAIMER.md), and
+> [TERMS.md](TERMS.md). Docs maximize practical protection; they are not a
+> guarantee of absolute immunity in every jurisdiction. If that is unacceptable,
+> do not download this repo.
 
 **cmux-moshi** is the Moshi **host integration** for
 [cmux](https://github.com/manaflow-ai/cmux). Moshi is a phone client that

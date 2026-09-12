@@ -47,7 +47,9 @@ SECURITY, ACCURACY, COMPLETENESS, OR QUIET ENJOYMENT.
 backdoors, supply-chain compromise, accidental harmful logic, or contributor
 error.** Maintainers and copyright holders do **not** promise to review,
 audit, sanitize, test on your machines, or continuously monitor every commit,
-pull request, dependency, action, or release binary.
+pull request, dependency, action, or release binary. They may leave public
+issues/PRs disabled, ignore submissions, or merge by mistake — **none of that
+creates liability** for supply-chain harm, credit burn, or malicious code.
 
 You may **not** rely on README text, issues, discussions, or chat answers as
 professional, legal, security, or operational advice.

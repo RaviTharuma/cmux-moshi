@@ -10,6 +10,20 @@ include code), you accept [NOTICE.md](NOTICE.md), [DISCLAIMER.md](DISCLAIMER.md)
 malicious/defective code — including code that is accidentally merged. This is
 free hobby software; contributing does not create a paid relationship.
 
+## Public contributions are at your risk
+
+- Opening an issue or PR is **entirely at the contributor’s risk** (including any
+  CI minutes, cloud, or AI credits burned by your branch, fork, or workflows).
+- Maintainers have **no duty to review, triage, respond to, merge, or keep open**
+  any issue or pull request.
+- Maintainers may **disable issues, discussions, and/or pull requests**, restrict
+  the repo to private collaborators, or ignore public contributions at any time,
+  with or without notice, and without liability.
+- **Accidental merge** of malicious or defective code does **not** create
+  maintainer liability. If you need near-zero accidental-merge exposure as a
+  maintainer, prefer invite-only collaborators (see [docs on liability limits](https://github.com/RaviTharuma/cmux-moshi/blob/main/DISCLAIMER.md)
+  and project notes). Contributors still warrant and indemnify per below.
+
 ## Before you start
 
 1. Read the [README](README.md), [NOTICE.md](NOTICE.md),

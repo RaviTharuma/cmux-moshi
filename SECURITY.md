@@ -47,10 +47,17 @@ Please give us reasonable time to fix and ship a release before public
 disclosure. We will credit reporters who wish to be named unless doing so would
 increase risk.
 
-## No warranty / no SLA
+## No warranty / no SLA / no duty to review
 
 Security process here is **best-effort only**. Receiving a report, opening an
 advisory, or shipping a fix does **not** create a warranty, monitoring duty, or
 liability for supply-chain attacks, dependency compromise, CI abuse, credit
 overages, or malicious contributions. See [NOTICE.md](NOTICE.md),
 [DISCLAIMER.md](DISCLAIMER.md), and [TERMS.md](TERMS.md).
+
+Public contributions (issues/PRs) are at the **contributor’s risk**. Maintainers
+have **no duty to review** every PR, dependency bump, or release artifact.
+Maintainers may disable issues/PRs or limit the repo to private collaborators
+at any time. Merging a contribution — including by mistake — does **not** make
+maintainers liable for malware, supply-chain harm, or spend on third-party
+accounts.
