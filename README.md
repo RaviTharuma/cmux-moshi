@@ -16,7 +16,9 @@
   English ·
   Kurz auf Deutsch unten ·
   <a href="CHANGELOG.md">changelog</a> ·
-  <a href="docs/PLUGIN.md">plugin contract</a>
+  <a href="docs/PLUGIN.md">plugin contract</a> ·
+  <a href="CONTRIBUTING.md">contributing</a> ·
+  <a href="DISCLAIMER.md">disclaimer</a>
 </p>
 
 **cmux-moshi** is the Moshi **host integration** for
@@ -195,6 +197,19 @@ Layout: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 Plugin contract: [docs/PLUGIN.md](docs/PLUGIN.md).
 Agent notes: [AGENTS.md](AGENTS.md).
 
+## Community & policies
+
+| Doc | Purpose |
+| --- | --- |
+| [DISCLAIMER.md](DISCLAIMER.md) | Unofficial status, trademarks, no warranty |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Dev setup, PR process, coding guidelines |
+| [docs/ISSUE_REPORTING.md](docs/ISSUE_REPORTING.md) | What to include in bug/feature reports |
+| [SUPPORT.md](SUPPORT.md) | Where to get help |
+| [SECURITY.md](SECURITY.md) | Private vulnerability reporting |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Contributor Covenant |
+
+Use the GitHub **Bug report** / **Feature request** forms when opening issues.
+
 ## License
 
-[MIT](LICENSE) © 2026 Ravi Tharuma.
+[MIT](LICENSE) © 2026 Ravi Tharuma. See also [DISCLAIMER.md](DISCLAIMER.md).
