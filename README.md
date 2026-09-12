@@ -18,8 +18,20 @@
   <a href="CHANGELOG.md">changelog</a> ·
   <a href="docs/PLUGIN.md">plugin contract</a> ·
   <a href="CONTRIBUTING.md">contributing</a> ·
-  <a href="DISCLAIMER.md">disclaimer</a>
+  <a href="NOTICE.md">notice</a> ·
+  <a href="DISCLAIMER.md">disclaimer</a> ·
+  <a href="TERMS.md">terms</a>
 </p>
+
+> **Free software — use at your own risk.** This is an unofficial hobby project
+> provided **AS IS**. Authors/maintainers accept **no liability** for
+> supply-chain attacks, cloud/CI/AI credit burn, host damage, or malicious /
+> defective contributor code (including accidental merges). There is **no duty
+> to review** PRs; public issues/PRs may be disabled. By using or contributing
+> you accept [NOTICE.md](NOTICE.md), [DISCLAIMER.md](DISCLAIMER.md), and
+> [TERMS.md](TERMS.md). Docs maximize practical protection; they are not a
+> guarantee of absolute immunity in every jurisdiction. If that is unacceptable,
+> do not download this repo.
 
 **cmux-moshi** is the Moshi **host integration** for
 [cmux](https://github.com/manaflow-ai/cmux). Moshi is a phone client that
@@ -43,6 +55,9 @@ Current source version: **v0.3.0**.
 > sieht die cmux-Linke-Sidebar nie. Produkt ist die CLI (`sync`, Dashboard,
 > doctor). `cmux sidebar plugin install` ist nur der offizielle
 > Verteilkanal; `plugin use` ist optional (Workspace-Picker in cmux).
+> **Haftung:** Kostenlose Hobby-Software **ohne Gewähr**. Nutzung auf eigenes
+> Risiko — siehe [NOTICE.md](NOTICE.md) / [DISCLAIMER.md](DISCLAIMER.md) /
+> [TERMS.md](TERMS.md).
 
 ## Install (host CLI)
 
@@ -199,17 +214,24 @@ Agent notes: [AGENTS.md](AGENTS.md).
 
 ## Community & policies
 
+> **Use at your own risk.** Free code does not make the author your vendor or
+> insurer. See [NOTICE.md](NOTICE.md), [DISCLAIMER.md](DISCLAIMER.md), and
+> [TERMS.md](TERMS.md).
+
 | Doc | Purpose |
 | --- | --- |
-| [DISCLAIMER.md](DISCLAIMER.md) | Unofficial status, trademarks, no warranty |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Dev setup, PR process, coding guidelines |
+| [NOTICE.md](NOTICE.md) | Short “AS IS / no liability” notice |
+| [DISCLAIMER.md](DISCLAIMER.md) | Full no-warranty + liability exclusion + no-sue covenant |
+| [TERMS.md](TERMS.md) | Supply chain, credits, contributor indemnity |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Dev setup, PR process, contributor warranties |
 | [docs/ISSUE_REPORTING.md](docs/ISSUE_REPORTING.md) | What to include in bug/feature reports |
-| [SUPPORT.md](SUPPORT.md) | Where to get help |
-| [SECURITY.md](SECURITY.md) | Private vulnerability reporting |
+| [SUPPORT.md](SUPPORT.md) | Where to get help (no support SLA) |
+| [SECURITY.md](SECURITY.md) | Private vulnerability reporting (no SLA) |
 | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Contributor Covenant |
 
 Use the GitHub **Bug report** / **Feature request** forms when opening issues.
 
 ## License
 
-[MIT](LICENSE) © 2026 Ravi Tharuma. See also [DISCLAIMER.md](DISCLAIMER.md).
+[MIT](LICENSE) © 2026 Ravi Tharuma. Free software; liability and risk:
+[NOTICE.md](NOTICE.md), [DISCLAIMER.md](DISCLAIMER.md), [TERMS.md](TERMS.md).

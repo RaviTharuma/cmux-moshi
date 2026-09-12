@@ -12,8 +12,9 @@ forms** (Bug report / Feature request) so required fields are not skipped.
 4. Confirm the problem is in **cmux-moshi**, not upstream cmux / Moshi / tmux /
    mosh / SSH. Upstream bugs belong in those projects; you can still open a
    tracking issue here that links upstream if integration is affected.
-5. Read [DISCLAIMER.md](../DISCLAIMER.md) so expectations around warranty and
-   affiliation are clear.
+5. Read [DISCLAIMER.md](../DISCLAIMER.md) and [TERMS.md](../TERMS.md). Using
+   or filing issues means you accept as-is software and zero maintainer
+   liability for supply-chain issues, credit burn, and merged contributor code.
 
 ## Bug reports
 

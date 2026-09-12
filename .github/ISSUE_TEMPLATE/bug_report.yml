@@ -19,7 +19,7 @@ body:
           required: true
         - label: I am reporting a cmux-moshi problem (not only upstream cmux/Moshi/tmux)
           required: true
-        - label: I understand this project is unofficial and provided as-is ([DISCLAIMER.md](https://github.com/RaviTharuma/cmux-moshi/blob/main/DISCLAIMER.md))
+        - label: I accept DISCLAIMER.md and TERMS.md (no maintainer liability for supply chain, credit burn, or accidental merge of bad code)
           required: true
   - type: textarea
     id: summary
