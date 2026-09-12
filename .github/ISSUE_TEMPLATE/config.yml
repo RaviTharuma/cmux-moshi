@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Read the disclaimer
+  - name: Read the short notice
+    url: https://github.com/RaviTharuma/cmux-moshi/blob/main/NOTICE.md
+    about: Free AS-IS software — no warranty, no maintainer liability.
+  - name: Read the full disclaimer
     url: https://github.com/RaviTharuma/cmux-moshi/blob/main/DISCLAIMER.md
-    about: As-is software — no liability for supply chain, credits, or merged PRs.
+    about: No liability for supply chain, credits, or merged PRs; covenant not to sue.
   - name: Terms of use
     url: https://github.com/RaviTharuma/cmux-moshi/blob/main/TERMS.md
     about: Risk allocation, contributor indemnity, and no duty to audit.
