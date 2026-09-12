@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read the disclaimer
+    url: https://github.com/RaviTharuma/cmux-moshi/blob/main/DISCLAIMER.md
+    about: Unofficial project — not affiliated with cmux or Moshi; provided as-is.
+  - name: Support / docs index
+    url: https://github.com/RaviTharuma/cmux-moshi/blob/main/SUPPORT.md
+    about: Where to look for install help, architecture, and contribution docs.
+  - name: Security vulnerability
+    url: https://github.com/RaviTharuma/cmux-moshi/security/advisories/new
+    about: Report security issues privately — do not open a public issue.
+  - name: Contributing guide
+    url: https://github.com/RaviTharuma/cmux-moshi/blob/main/CONTRIBUTING.md
+    about: Development setup, PR expectations, and coding guidelines.

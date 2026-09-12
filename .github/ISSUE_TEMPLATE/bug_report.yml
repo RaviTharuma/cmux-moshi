@@ -1,0 +1,76 @@
+name: Bug report
+description: Something in cmux-moshi does not work as expected
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please read
+        [docs/ISSUE_REPORTING.md](https://github.com/RaviTharuma/cmux-moshi/blob/main/docs/ISSUE_REPORTING.md)
+        and run `cmux-moshi doctor` first. Do **not** use this form for security
+        reports — see [SECURITY.md](https://github.com/RaviTharuma/cmux-moshi/blob/main/SECURITY.md).
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and did not find a duplicate
+          required: true
+        - label: I am reporting a cmux-moshi problem (not only upstream cmux/Moshi/tmux)
+          required: true
+        - label: I understand this project is unofficial and provided as-is ([DISCLAIMER.md](https://github.com/RaviTharuma/cmux-moshi/blob/main/DISCLAIMER.md))
+          required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One or two sentences describing the failure.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands and UI steps.
+      placeholder: |
+        1. cmux-moshi sync --dry-run
+        2. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include error messages and relevant stdout/stderr.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Versions and install method. Paste `cmux-moshi doctor` output if possible (redact secrets).
+      placeholder: |
+        - cmux-moshi: (output of --version)
+        - Install: plugin / cargo / release binary
+        - OS:
+        - cmux:
+        - tmux:
+        - mosh (optional):
+        - MOSHI_CLIENT set? yes/no
+        - doctor output:
+    validations:
+      required: true
+  - type: textarea
+    id: extras
+    attributes:
+      label: Additional context
+      description: Logs, screenshots, related PRs, workarounds.
+    validations:
+      required: false
