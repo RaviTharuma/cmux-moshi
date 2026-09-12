@@ -46,3 +46,11 @@ should be reported to those projects.
 Please give us reasonable time to fix and ship a release before public
 disclosure. We will credit reporters who wish to be named unless doing so would
 increase risk.
+
+## No warranty / no SLA
+
+Security process here is **best-effort only**. Receiving a report, opening an
+advisory, or shipping a fix does **not** create a warranty, monitoring duty, or
+liability for supply-chain attacks, dependency compromise, CI abuse, credit
+overages, or malicious contributions. See [DISCLAIMER.md](DISCLAIMER.md) and
+[TERMS.md](TERMS.md).

@@ -18,7 +18,8 @@
   <a href="CHANGELOG.md">changelog</a> ·
   <a href="docs/PLUGIN.md">plugin contract</a> ·
   <a href="CONTRIBUTING.md">contributing</a> ·
-  <a href="DISCLAIMER.md">disclaimer</a>
+  <a href="DISCLAIMER.md">disclaimer</a> ·
+  <a href="TERMS.md">terms</a>
 </p>
 
 **cmux-moshi** is the Moshi **host integration** for
@@ -199,17 +200,24 @@ Agent notes: [AGENTS.md](AGENTS.md).
 
 ## Community & policies
 
+> **Use at your own risk.** Authors and maintainers disclaim liability for
+> supply-chain compromise, cloud/CI/AI credit burn, and malicious or defective
+> contributor code (including code merged by mistake). See
+> [DISCLAIMER.md](DISCLAIMER.md) and [TERMS.md](TERMS.md).
+
 | Doc | Purpose |
 | --- | --- |
-| [DISCLAIMER.md](DISCLAIMER.md) | Unofficial status, trademarks, no warranty |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Dev setup, PR process, coding guidelines |
+| [DISCLAIMER.md](DISCLAIMER.md) | Maximum no-warranty + liability exclusion |
+| [TERMS.md](TERMS.md) | Supply chain, credits, contributor indemnity |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Dev setup, PR process, contributor warranties |
 | [docs/ISSUE_REPORTING.md](docs/ISSUE_REPORTING.md) | What to include in bug/feature reports |
-| [SUPPORT.md](SUPPORT.md) | Where to get help |
-| [SECURITY.md](SECURITY.md) | Private vulnerability reporting |
+| [SUPPORT.md](SUPPORT.md) | Where to get help (no support SLA) |
+| [SECURITY.md](SECURITY.md) | Private vulnerability reporting (no SLA) |
 | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Contributor Covenant |
 
 Use the GitHub **Bug report** / **Feature request** forms when opening issues.
 
 ## License
 
-[MIT](LICENSE) © 2026 Ravi Tharuma. See also [DISCLAIMER.md](DISCLAIMER.md).
+[MIT](LICENSE) © 2026 Ravi Tharuma. Liability and risk allocation:
+[DISCLAIMER.md](DISCLAIMER.md), [TERMS.md](TERMS.md).
