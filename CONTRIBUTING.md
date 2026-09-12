@@ -4,15 +4,16 @@ Thanks for helping. This document covers how to propose changes, report issues,
 and get a patch landed.
 
 **Important:** By contributing (issues, PRs, patches, reviews, or comments that
-include code), you accept [DISCLAIMER.md](DISCLAIMER.md), [TERMS.md](TERMS.md),
-and the contribution warranties below. Maintainers do **not** accept liability
-for supply-chain issues, credit/spend overages, or malicious/defective code —
-including code that is accidentally merged.
+include code), you accept [NOTICE.md](NOTICE.md), [DISCLAIMER.md](DISCLAIMER.md),
+[TERMS.md](TERMS.md), and the contribution warranties below. Maintainers do
+**not** accept liability for supply-chain issues, credit/spend overages, or
+malicious/defective code — including code that is accidentally merged. This is
+free hobby software; contributing does not create a paid relationship.
 
 ## Before you start
 
-1. Read the [README](README.md), [DISCLAIMER.md](DISCLAIMER.md), and
-   [TERMS.md](TERMS.md).
+1. Read the [README](README.md), [NOTICE.md](NOTICE.md),
+   [DISCLAIMER.md](DISCLAIMER.md), and [TERMS.md](TERMS.md).
 2. Skim [AGENTS.md](AGENTS.md) for hard product boundaries (CLI-first Moshi host
    integration; no left-sidebar Moshi product; talk to cmux only through the
    public CLI / `cmux-client`).
@@ -33,7 +34,7 @@ You represent and warrant that:
 
 You agree to **indemnify and hold harmless** the authors, copyright holders, and
 maintainers from claims and costs arising from your contribution, to the maximum
-extent permitted by law. See [TERMS.md](TERMS.md) §5.
+extent permitted by law. See [TERMS.md](TERMS.md) §6.
 
 Malicious or abusive submissions may be reverted, reported, and result in bans
 under [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
@@ -112,5 +113,5 @@ Participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 ## License
 
 By contributing, you agree that your contributions are licensed under the same
-[MIT License](LICENSE) that covers this project, and that [DISCLAIMER.md](DISCLAIMER.md)
-and [TERMS.md](TERMS.md) apply.
+[MIT License](LICENSE) that covers this project, and that [NOTICE.md](NOTICE.md),
+[DISCLAIMER.md](DISCLAIMER.md), and [TERMS.md](TERMS.md) apply.

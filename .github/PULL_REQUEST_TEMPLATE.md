@@ -14,11 +14,11 @@
 
 By opening this PR I confirm:
 
-- [ ] I accept [DISCLAIMER.md](../DISCLAIMER.md) and [TERMS.md](../TERMS.md)
+- [ ] I accept [NOTICE.md](../NOTICE.md), [DISCLAIMER.md](../DISCLAIMER.md), and [TERMS.md](../TERMS.md)
 - [ ] I have the right to submit this under the MIT License
 - [ ] This change is **not** knowingly malicious, backdoored, or designed to steal secrets / burn credits / abuse CI
 - [ ] I understand maintainers may merge **without** a full security audit, and merge does **not** make them liable for defects or supply-chain harm
-- [ ] I agree to the indemnification terms in [TERMS.md](../TERMS.md) §5 and [CONTRIBUTING.md](../CONTRIBUTING.md)
+- [ ] I agree to the indemnification terms in [TERMS.md](../TERMS.md) §6 and [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 ## Checklist
 

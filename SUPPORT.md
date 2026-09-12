@@ -11,7 +11,7 @@
 | Feature idea | [Feature request](https://github.com/RaviTharuma/cmux-moshi/issues/new?template=feature_request.yml) |
 | How to contribute | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | Security vulnerability | [SECURITY.md](SECURITY.md) |
-| Warranty / liability / supply chain / credits | [DISCLAIMER.md](DISCLAIMER.md), [TERMS.md](TERMS.md) |
+| Warranty / liability / supply chain / credits | [NOTICE.md](NOTICE.md), [DISCLAIMER.md](DISCLAIMER.md), [TERMS.md](TERMS.md) |
 
 ## What this project is not
 
@@ -22,6 +22,7 @@
 - **Not a warranty, insurance policy, or indemnity** for supply-chain attacks,
   contributor malware, host damage, or any cloud/CI/AI **credit or spend**
   overages on your accounts
+- **Not a paid product** — free code does not make the author your vendor
 
 ## Response expectations
 

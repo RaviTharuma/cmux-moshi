@@ -1,8 +1,8 @@
 # Terms of use
 
-These terms supplement the [MIT License](LICENSE) and
-[DISCLAIMER.md](DISCLAIMER.md). They apply to every visitor, user, downloader,
-forker, distributor, and contributor.
+These terms supplement the [MIT License](LICENSE),
+[DISCLAIMER.md](DISCLAIMER.md), and [NOTICE.md](NOTICE.md). They apply to every
+visitor, user, downloader, forker, distributor, and contributor.
 
 ## 1. Acceptance
 
@@ -10,20 +10,30 @@ Using or contributing to this repository constitutes acceptance of:
 
 - the MIT License
 - [DISCLAIMER.md](DISCLAIMER.md)
+- [NOTICE.md](NOTICE.md)
 - these Terms
 - [CONTRIBUTING.md](CONTRIBUTING.md) (contributors)
 
-If you cannot accept full assumption of risk and zero maintainer liability to
-the maximum extent allowed by law, **stop using this software immediately**.
+If you cannot accept full assumption of risk and **zero** maintainer liability
+to the maximum extent allowed by law, **stop using this software immediately**
+and delete all copies.
 
-## 2. No professional relationship
+## 2. Free software, not a product you bought
+
+This repository is published **gratis**. There is no purchase price, no paid
+tier in this repo, no support retainer, and no service-level agreement.
+Downloading free code does **not** make the author your vendor, contractor, or
+insurer. Gratitude, stars, or “thanks for the free tool” do **not** create
+duties the other way.
+
+## 3. No professional relationship
 
 Nothing here creates an employment, partnership, agency, fiduciary, support,
 or professional-services relationship with the authors or maintainers. Free
-software does not mean free insurance, free audits, or free indemnity from us
-to you.
+software does not mean free insurance, free audits, free incident response, or
+free indemnity from us to you.
 
-## 3. Supply chain and third parties
+## 4. Supply chain and third parties
 
 This project may depend on or interact with third-party software, registries,
 CI systems, clouds, and network services. **We do not control those parties.**
@@ -36,7 +46,7 @@ solely your risk. We disclaim all responsibility for:
 - Upstream `cmux`, Moshi, tmux, mosh, OS packages
 - Agent/automation platforms that clone or build this repo
 
-## 4. Credits, quotas, and money
+## 5. Credits, quotas, and money
 
 Authors and maintainers are **not responsible** for any charges, credit burn,
 rate-limit exhaustion, or quota overage on **your** accounts — including but
@@ -45,7 +55,7 @@ Cursor or other AI agent usage, LLM APIs, or hosting — whether caused by
 normal use, misconfiguration, forks, CI matrices, malicious PRs, or automated
 agents. **You** control your billing limits and kill switches.
 
-## 5. Contributions and merge risk
+## 6. Contributions and merge risk
 
 Opening a pull request, issue, discussion, or patch means you agree that:
 
@@ -63,27 +73,35 @@ Opening a pull request, issue, discussion, or patch means you agree that:
    costs, and expenses (including reasonable legal fees) arising from your
    contribution or from your breach of these terms.
 
-## 6. No duty to monitor
+## 7. No duty to monitor or continue the project
 
 Maintainers have **no obligation** to monitor issues, PRs, dependencies,
-releases, or downstream use. Silence is not approval. Security processes in
+releases, or downstream use, and **no obligation** to keep the project alive,
+secure, or compatible. Silence is not approval. Security processes in
 [SECURITY.md](SECURITY.md) are voluntary process notes, not warranties or SLAs.
 
-## 7. Termination
+## 8. Forks, employers, and redistribution
+
+If your company or customers use this software, **that is your choice and your
+risk**. The authors are not parties to your employment or customer contracts.
+Redistributors must pass along the MIT notice and must not imply the original
+authors endorse or support the redistribution.
+
+## 9. Termination
 
 We may delete, archive, force-push, or abandon this repository at any time.
 Your license to past MIT-licensed copies you already received continues under
 the MIT License; no ongoing support is owed.
 
-## 8. Governing intent
+## 10. Governing intent
 
 These terms are intended to allocate **all** residual risk to users and
-contributors and **none** to authors/maintainers, to the fullest extent a
-court will enforce. If a provision is held unenforceable, the remainder stays
-in force and shall be interpreted to approach that intent as closely as
-possible.
+contributors and **none** to authors/maintainers for providing free code, to
+the fullest extent a court will enforce. If a provision is held
+unenforceable, the remainder stays in force and shall be interpreted to
+approach that intent as closely as possible.
 
-## 9. Contact
+## 11. Contact
 
 Product questions: [SUPPORT.md](SUPPORT.md).  
 Security: [SECURITY.md](SECURITY.md).  
