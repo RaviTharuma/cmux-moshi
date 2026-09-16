@@ -35,11 +35,16 @@ promise or SLA. Keep yourself informed; silence does not create liability.
 
 ## Scope notes
 
-cmux-moshi is a local host CLI. Typical concerns include unsafe handling of
-tmux/session names, unexpected file writes from shell/LaunchAgent installers,
-command injection via untrusted workspace titles, or shipping compromised
-release artifacts. Issues in upstream `cmux`, Moshi, or `tmux` themselves
-should be reported to those projects.
+cmux-moshi is a local **host CLI** (Rust/Cargo) that drives **tmux** sessions
+and talks to cmux only through the public `cmux` CLI / `cmux-client`. Moshi
+phones connect over Mosh/SSH and never see the cmux left sidebar. Typical
+concerns include unsafe handling of tmux/session names, unexpected file writes
+from shell/LaunchAgent installers, command injection via untrusted workspace
+titles, or shipping compromised GitHub Release assets / CI artifacts. Issues in
+upstream `cmux`, Moshi, `tmux`, or `mosh` themselves should be reported to those
+projects.
+
+Stack overview: [STACK.md](STACK.md). Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Disclosure
 
