@@ -16,11 +16,14 @@
   English ·
   Kurz auf Deutsch unten ·
   <a href="CHANGELOG.md">changelog</a> ·
+  <a href="STACK.md">stack</a> ·
+  <a href="docs/ARCHITECTURE.md">architecture</a> ·
   <a href="docs/PLUGIN.md">plugin contract</a> ·
   <a href="CONTRIBUTING.md">contributing</a> ·
   <a href="NOTICE.md">notice</a> ·
   <a href="DISCLAIMER.md">disclaimer</a> ·
-  <a href="TERMS.md">terms</a>
+  <a href="TERMS.md">terms</a> ·
+  <a href="SECURITY.md">security</a>
 </p>
 
 > **Free software — use at your own risk.** This is an unofficial hobby project
@@ -35,25 +38,27 @@
 
 **cmux-moshi** is the Moshi **host integration** for
 [cmux](https://github.com/manaflow-ai/cmux). Moshi is a phone client that
-connects over Mosh or SSH. It never sees the cmux left sidebar. What the phone
-needs on the Mac is:
+connects over Mosh or SSH. It never sees the cmux left sidebar (workspaces /
+machines only). What the phone needs on the Mac is:
 
-1. Friendly cmux workspace titles copied onto tmux session names (`ttys*` → title)
+1. Friendly cmux workspace titles copied onto **tmux** session names (`ttys*` → title)
 2. A login-shell dashboard when Moshi exports `MOSHI_CLIENT=1`
-3. `doctor`, `cleanup`, optional `install-shell`, and optional LaunchAgent helpers
+3. `doctor`, `list`, `sync`, `cleanup`, optional `install-shell`, and optional LaunchAgent helpers
 
 The product is the **`cmux-moshi` CLI** (and an optional LaunchAgent that runs
-`sync`). Official cmux only ships git plugins through the
+`sync`). Session multiplexing is **tmux only** — not Zellij. Official cmux only
+ships git plugins through the
 [mux sidebar plugin](https://github.com/manaflow-ai/cmux/blob/main/cmux-tui/spec/plugins.md)
 channel, so this repo also carries a valid `cmux-plugin.toml`. That packaging
 can install the repo; `plugin use` is optional and hosts a small generic
-workspace picker. It is not a Moshi panel.
+workspace picker. It is not a Moshi panel. A cmux right sidebar, if any, is
+exploration only — this repo does not invent shipped right-panel Moshi features.
 
-Current source version: **v0.3.0**.
+Current source version: **v0.3.0**. Tech summary: [STACK.md](STACK.md).
 
 > **Deutsch (kurz):** Moshi-Host-Integration, keine Sidebar-App. Die Phone-App
 > sieht die cmux-Linke-Sidebar nie. Produkt ist die CLI (`sync`, Dashboard,
-> doctor). `cmux sidebar plugin install` ist nur der offizielle
+> doctor) auf **tmux**. `cmux sidebar plugin install` ist nur der offizielle
 > Verteilkanal; `plugin use` ist optional (Workspace-Picker in cmux).
 > **Haftung:** Kostenlose Hobby-Software **ohne Gewähr**. Nutzung auf eigenes
 > Risiko — siehe [NOTICE.md](NOTICE.md) / [DISCLAIMER.md](DISCLAIMER.md) /
@@ -209,8 +214,10 @@ cargo build --release
 ```
 
 Layout: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Stack: [STACK.md](STACK.md).
 Plugin contract: [docs/PLUGIN.md](docs/PLUGIN.md).
 Agent notes: [AGENTS.md](AGENTS.md).
+License: [LICENSE](LICENSE) (MIT).
 
 ## Community & policies
 
@@ -223,6 +230,8 @@ Agent notes: [AGENTS.md](AGENTS.md).
 | [NOTICE.md](NOTICE.md) | Short “AS IS / no liability” notice |
 | [DISCLAIMER.md](DISCLAIMER.md) | Full no-warranty + liability exclusion + no-sue covenant |
 | [TERMS.md](TERMS.md) | Supply chain, credits, contributor indemnity |
+| [LICENSE](LICENSE) | MIT license grant |
+| [STACK.md](STACK.md) | Tech stack (Rust, cmux, tmux, Mosh/SSH, CI) |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Dev setup, PR process, contributor warranties |
 | [docs/ISSUE_REPORTING.md](docs/ISSUE_REPORTING.md) | What to include in bug/feature reports |
 | [SUPPORT.md](SUPPORT.md) | Where to get help (no support SLA) |

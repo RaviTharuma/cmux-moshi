@@ -123,11 +123,16 @@ maintainers.
 
 ## Scope reminder
 
-Phones connecting over Mosh/SSH never see the cmux left sidebar. This repo’s
-product is the **host CLI** (and optional packaging). See [AGENTS.md](AGENTS.md).
+Phones connecting over Mosh/SSH never see the cmux left sidebar (workspaces /
+machines only). This repo’s product is the **host CLI** on **tmux** (and
+optional mux-plugin packaging / LaunchAgent). It is not a Zellij integration
+and does not invent shipped cmux right-panel Moshi features. See
+[AGENTS.md](AGENTS.md), [STACK.md](STACK.md), and
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Conflict
 
-If anything in READMEs, issues, or chats conflicts with [LICENSE](LICENSE),
-this file, [NOTICE.md](NOTICE.md), or [TERMS.md](TERMS.md), the license and
-these liability terms control.
+If anything in READMEs, issues, chats, or other docs conflicts with
+[LICENSE](LICENSE), this file, [NOTICE.md](NOTICE.md), or [TERMS.md](TERMS.md),
+the license and these liability terms control. Do not interpret softer wording
+elsewhere as a waiver of this shield.
