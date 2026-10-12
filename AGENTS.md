@@ -39,3 +39,20 @@ need Rust/Cargo.
 `cmux`, `tmux`, and `mosh` may be missing. Commands that only parse or plan
 must stay unit-testable through `FakeHost`. `doctor` must degrade with clear
 warnings instead of crashing.
+
+## Naming (HARD)
+
+Name every new identifier with this grammar. Do not invent a second style.
+
+Semantic skill: https://github.com/thonymg/skills/tree/main/skills/naming-convention
+
+- A function is a verb: `fetch_user`, not `user_data`.
+- A boolean starts with `is`, `has`, or `can`.
+- A file is named after the thing inside it. One type per file.
+- One word for one concept. If the repo says `user`, do not also say `account` or `member` for the same thing.
+- Forbidden: `data`, `info`, `temp`, `helper`, `manager`, `utils`, `misc`, `common`, `stuff`.
+- Do not repeat the owner in the name: `user.name`, not `user.user_name`.
+- Abbreviate only words already used in this repo (`id`, `url`, `ssh`). Otherwise spell them out.
+- A new term is written down once, then used. Do not invent a synonym in passing.
+- An existing file in the same directory wins when that directory is already consistent.
+- This repo is Rust. `snake_case` functions, `PascalCase` types, `SCREAMING_SNAKE_CASE` consts. Clippy wins. Do not apply TypeScript or Go casing here.
